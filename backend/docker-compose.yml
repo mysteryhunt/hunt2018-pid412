@@ -1,0 +1,65 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: puzzle
+      MYSQL_USER: puzzle
+      MYSQL_PASSWORD: puzzle
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis:
+    image: redis:3.2.10
+    restart: always
+
+  puzzle-dev:
+    depends_on:
+      - db
+      - redis
+    build: .
+    ports:
+      - "8000:80"
+    restart: always
+    environment:
+      HUNT_MYSQL_HOST: db
+      HUNT_MYSQL_PORT: 3306
+      HUNT_MYSQL_USER: puzzle
+      HUNT_MYSQL_PASSWORD: puzzle
+      HUNT_MYSQL_DB: puzzle
+      HUNT_SESSION_SECRET: sosecret
+      HUNT_REDIS_URL: 'redis://redis:6379'
+      HUNT_PORT: 80
+      HUNT_CORS_ORIGIN: '*'
+    command: "/wait-for-it.sh db:3306 -- /wait-for-it.sh redis:6379 -- yarn start-mon"
+    volumes:
+      - ./wait-for-it.sh:/wait-for-it.sh
+      - ./src:/app/src
+
+  # puzzle-prod:
+  #   depends_on:
+  #     - db
+  #     - redis
+  #   build: .
+  #   ports:
+  #     - "8000:80"
+  #   restart: always
+  #   environment:
+  #     HUNT_MYSQL_HOST: db
+  #     HUNT_MYSQL_PORT: 3306
+  #     HUNT_MYSQL_USER: puzzle
+  #     HUNT_MYSQL_PASSWORD: puzzle
+  #     HUNT_MYSQL_DB: puzzle
+  #     HUNT_SESSION_SECRET: sosecret
+  #     HUNT_REDIS_URL: 'redis://redis:6379'
+  #     HUNT_PORT: 80
+  #     HUNT_CORS_ORIGIN: '*'
+  #   command: "/wait-for-it.sh db:3306 -- /wait-for-it.sh redis:6379 -- node /app/src/index.js"
+  #   volumes:
+  #     - ./wait-for-it.sh:/wait-for-it.sh
+
+volumes:
+  mysql-data:

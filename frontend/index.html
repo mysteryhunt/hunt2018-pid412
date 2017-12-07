@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>TPMH</title>
+  </head>
+  <body>
+    <h1>TPMH</h1>
+
+    <script type="text/javascript" src="https://storage.googleapis.com/hunt2018-js/huntjs-client/huntjs-client.min.js"></script>
+
+    <script type="text/javascript">
+      var client = HuntJSClient.connect('tpmh', 'http://localhost:8000');
+
+      // Test RPCs
+      client.post('/move', { direction: 'S' })
+        .then(r => console.log('/move succeeded'))
+        .catch(e => console.error('/move failed', e));
+
+      client.get('/gameState')
+        .then(r => console.log('/gameState', r))
+        .catch(e => console.error('/gameState failed', e));
+
+      client.get('/currentTime')
+        .then(r => console.log('/currentTime', r))
+        .catch(e => console.log('/currentTime failed', e));
+
+      client.get('/levelData', { level: 1 })
+        .then(r => console.log('/levelData', r))
+        .catch(e => console.log('/levelData failed', e));
+
+      client.get('/teamStatus')
+        .then(r => console.log('/teamStatus', r))
+        .catch(e => console.log('/teamStatus failed', e));
+
+      client.post('/changeLevel', { level: 1 })
+        .then(r => console.log('/changeLevel', r))
+        .catch(e => console.log('/changeLevel failed', e));
+
+      // Start up pubsub
+      client.post('/startFakeEmitters')
+        .then(() => console.log('Fake emitters started'))
+        .catch(e => console.log('/startFakeEmitters failed', e));
+
+      client.subscribe('gameState', (newState) => {
+        console.log('New game state:', newState);
+      });
+
+      client.subscribe('notifications', (msg) => {
+        console.log('New notification:', msg);
+      });
+    </script>
+  </body>
+
+</html>
+
+
+
