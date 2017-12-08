@@ -18,10 +18,6 @@
         .then(r => console.log('/move succeeded'))
         .catch(e => console.error('/move failed', e));
 
-      client.get('/gameState')
-        .then(r => console.log('/gameState', r))
-        .catch(e => console.error('/gameState failed', e));
-
       client.get('/currentTime')
         .then(r => console.log('/currentTime', r))
         .catch(e => console.log('/currentTime failed', e));
@@ -30,13 +26,18 @@
         .then(r => console.log('/levelData', r))
         .catch(e => console.log('/levelData failed', e));
 
-      client.get('/teamStatus')
-        .then(r => console.log('/teamStatus', r))
-        .catch(e => console.log('/teamStatus failed', e));
-
       client.post('/changeLevel', { level: 1 })
         .then(r => console.log('/changeLevel', r))
         .catch(e => console.log('/changeLevel failed', e));
+
+      function heartbeat() {
+        client.post('/heartbeat')
+          .then(r => console.log('/hearbeat succeeded'))
+          .catch(e => console.error('/hearbeat failed', e));
+      }
+
+      heartbeat();
+      setInterval(heartbeat, 2 * 60 * 1000);
 
       // Start up pubsub
       client.post('/startFakeEmitters')

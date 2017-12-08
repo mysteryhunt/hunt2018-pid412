@@ -1,6 +1,10 @@
 /* eslint arrow-body-style: 0 */
 
 const HuntJS = require('huntjs-backend');
+const DB = require('./db');
+
+DB.init();
+
 let fakeGameState = '1,1512620911301,1,28';
 
 HuntJS.post('/move', ({ data }) => {
@@ -23,9 +27,9 @@ HuntJS.post('/move', ({ data }) => {
   },
 });
 
-HuntJS.get('/gameState', () => {
-  // TODO: get the actual game state from the simulation service
-  return fakeGameState;
+HuntJS.post('/heartbeat', () => {
+  // TODO: send a heartbeat to the simulation service
+  return null;
 });
 
 HuntJS.get('/currentTime', () => {
@@ -43,7 +47,7 @@ HuntJS.get('/levelData', ({ data }) => {
   }
 
   // TODO: actual level data
-  return 'fake level data';
+  return ['fake level data 1', 'fake level data 2'];
 });
 
 HuntJS.get('/teamStatus', () => {
@@ -51,9 +55,9 @@ HuntJS.get('/teamStatus', () => {
   return {
     level: 1,
     levelStatuses: [
-      { won: false, artifact: null },
-      { won: false, artifact: null },
-      { won: false, artifact: null },
+      { won: false, artifact: null, unlockedChunks: 4 },
+      { won: false, artifact: null, unlockedChunks: 2 },
+      { won: false, artifact: null, unlockedChunks: 2 },
     ],
   };
 });
@@ -71,10 +75,15 @@ HuntJS.post('/changeLevel', ({ data }) => {
   return 'fake level data';
 });
 
+HuntJS.onSubscribe('gameState', ({ team }) => {
+  // TODO: send a refresh request to the simulation service
+  console.log(`Got a new game state subscription for team ${team.id()}`);
+});
+
 // For testing, clients can hit startFakeEmitters to send some garbage to the
 // pubsub channels
 const fakeEmittersStartedForTeamIds = new Set();
-HuntJS.post('/startFakeEmitters', ({ team, pubsub }) => {
+HuntJS.post('/startFakeEmitters', ({ team }) => {
   if (fakeEmittersStartedForTeamIds.has(team.id())) {
     return null;
   }
@@ -86,7 +95,7 @@ HuntJS.post('/startFakeEmitters', ({ team, pubsub }) => {
     const newIdx = (fakeGameStates.indexOf(fakeGameState) + 1) % fakeGameStates.length;
     fakeGameState = fakeGameStates[newIdx];
 
-    pubsub.publish('gameState', fakeGameState);
+    team.publish('gameState', fakeGameState);
   }, 1000);
 
   const fakeMessages = [
@@ -96,7 +105,7 @@ HuntJS.post('/startFakeEmitters', ({ team, pubsub }) => {
   ];
   setInterval(() => {
     const message = fakeMessages[Math.floor(Math.random() * fakeMessages.length)];
-    pubsub.publish('notifications', message);
+    team.publish('notifications', message);
   }, 15000);
 
   return null;
