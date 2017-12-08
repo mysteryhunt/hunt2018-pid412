@@ -9,3 +9,11 @@
       .p { background-color: white; }
       .d { background-color: orange; }
       body { background-color: black; }
+
+      #notification {
+	  min-height: 50px;
+	  padding: 10px;
+      }
+      p {
+	  background-color: lightgrey;
+      }

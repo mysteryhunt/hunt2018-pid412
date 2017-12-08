@@ -4,54 +4,27 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>TPMH</title>
-  </head>
-  <body>
-    <h1>TPMH</h1>
-
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <style type="text/css">
+      td { height: 50px; width: 50px; text-align: center; }
+      table { border-spacing: 0; table-layout: fixed; width: 550px; height: 550px;}
+    </style>
     <script type="text/javascript" src="https://storage.googleapis.com/hunt2018-js/huntjs-client/huntjs-client.min.js"></script>
 
-    <script type="text/javascript">
-      var client = HuntJSClient.connect('tpmh', 'http://localhost:8000');
+    <script type="text/javascript" src="client.js"></script>
+    <script type="text/javascript" src="twitch.js"></script>
+  </head>
+  <body onload="init()">
+    <h1>TPMH</h1>
 
-      // Test RPCs
-      client.post('/move', { direction: 'S' })
-        .then(r => console.log('/move succeeded'))
-        .catch(e => console.error('/move failed', e));
+    <table id="grid">
+    </table>
 
-      client.get('/currentTime')
-        .then(r => console.log('/currentTime', r))
-        .catch(e => console.log('/currentTime failed', e));
+    <p id="notification"></p>
+    
+    <p>Level: <a href="javascript:changeLevel(1)">1</a> <a href="javascript:changeLevel(2)">2</a> <a href="javascript:changeLevel(3)">3</a>
+    </div>
 
-      client.get('/levelData', { level: 1 })
-        .then(r => console.log('/levelData', r))
-        .catch(e => console.log('/levelData failed', e));
-
-      client.post('/changeLevel', { level: 1 })
-        .then(r => console.log('/changeLevel', r))
-        .catch(e => console.log('/changeLevel failed', e));
-
-      function heartbeat() {
-        client.post('/heartbeat')
-          .then(r => console.log('/hearbeat succeeded'))
-          .catch(e => console.error('/hearbeat failed', e));
-      }
-
-      heartbeat();
-      setInterval(heartbeat, 2 * 60 * 1000);
-
-      // Start up pubsub
-      client.post('/startFakeEmitters')
-        .then(() => console.log('Fake emitters started'))
-        .catch(e => console.log('/startFakeEmitters failed', e));
-
-      client.subscribe('gameState', (newState) => {
-        console.log('New game state:', newState);
-      });
-
-      client.subscribe('notifications', (msg) => {
-        console.log('New notification:', msg);
-      });
-    </script>
   </body>
 
 </html>

@@ -225,7 +225,7 @@ function plot(map, t, pr, pc) {
 var time = 0;
 
 function handleState(level, startTime, ninjaX, ninjaY) {
-    plot(maps[level], getTime() - startTime, ninjaY, ninjaX);
+    plot(maps[level], (getTime() - startTime) / 1000, ninjaY, ninjaX);
 }
 
 function init() {
