@@ -3,9 +3,13 @@ package main
 import "github.com/kelseyhightower/envconfig"
 
 type tpmhConfig struct {
-	Port  int    `default:"8080"`
-	MySQL string `required:"true"`
-	Redis string `required:"true"`
+	Port          int    `default:"8080"`
+	RedisURL      string `required:"true" split_words:"true"`
+	MysqlHost     string `required:"true" split_words:"true"`
+	MysqlPort     int    `required:"true" split_words:"true"`
+	MysqlUser     string `required:"true" split_words:"true"`
+	MysqlPassword string `default:"" split_words:"true"`
+	MysqlDB       string `required:"true" split_words:"true"`
 
 	// This is the maximum FPS to run the simulator at. If we're processing
 	// frames faster than 1/MaxFPS seconds, we'll increase the length
@@ -30,12 +34,15 @@ type tpmhConfig struct {
 	// consistent even during high load, at the expense of taking a long
 	// time to respond to requests under high load.
 	MaxBufferLength int `default:"10" split_words:"true"`
+
+	// How long, in seconds, to allow games to survive between heartbeats
+	MinHeartbeatInterval int `default:"300" split_words:"true"`
 }
 
 func parseEnv() (*tpmhConfig, error) {
 	var config tpmhConfig
 
-	err := envconfig.Process("tpmh", &config)
+	err := envconfig.Process("hunt", &config)
 	if err != nil {
 		return nil, err
 	}

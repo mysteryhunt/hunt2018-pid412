@@ -44,6 +44,7 @@ func main() {
 		log.Errorw("Invalid environment variables",
 			"error", err,
 		)
+		return
 	}
 
 	app := gin.New()

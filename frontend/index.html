@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>TPMH</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <style type="text/css">
       td { height: 50px; width: 50px; text-align: center; }
       table { border-spacing: 0; table-layout: fixed; width: 550px; height: 550px;}
     </style>
     <script type="text/javascript" src="https://storage.googleapis.com/hunt2018-js/huntjs-client/huntjs-client.min.js"></script>
-
+    <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script type="text/javascript" src="client.js"></script>
     <script type="text/javascript" src="twitch.js"></script>
   </head>
@@ -20,9 +25,11 @@
     <table id="grid">
     </table>
 
-    <p id="notification"></p>
-    
-    <p>Level: <a href="javascript:changeLevel(1)">1</a> <a href="javascript:changeLevel(2)">2</a> <a href="javascript:changeLevel(3)">3</a>
+    <p id="status">Status: <span id="status-text">ready</span></p>
+
+    <p>Level: <a href="javascript:changeLevel(1)">1</a> <a href="javascript:changeLevel(2)">2</a> <a href="javascript:changeLevel(3)">3</a></p>
+    <p>Rate-limited: <span id="rate-limit-indicator">true</span> <button onClick="toggleRateLimiting()">Toggle</button></p>
+    <p>Delayed: <span id="delay-indicator">true</span> <button onClick="toggleDelay()">Toggle</button></p>
     </div>
 
   </body>

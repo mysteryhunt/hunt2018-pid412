@@ -69,9 +69,9 @@ func (state *State) MoveNinja(deltaX int8, deltaY int8) bool {
 	return true
 }
 
-func (state *State) RunFrame() bool {
+func (state *State) RunFrame() (bool, []string) {
 	// TODO: actuall simulate
-	return true
+	return false, nil
 }
 
 func (state *State) CurrentChunk() int8 {

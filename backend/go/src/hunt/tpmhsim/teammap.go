@@ -17,7 +17,7 @@ type levelStatus struct {
 
 type levelState interface {
 	MoveNinja(int8, int8) bool
-	RunFrame() bool
+	RunFrame() (bool, []string)
 	CurrentChunk() int8
 	Serialize() string
 	IsWon() bool
@@ -49,10 +49,10 @@ func (team *teamData) getLevelStatus() *levelStatus {
 // Call this before working with teams[teamID]. Initializes values from Redis,
 // MySQL, or default starting state if the team isn't in the map. Marks the
 // team as active so it won't get evicted for the next 5 minuts.
-func (teams teamMap) touch(teamID string) error {
+func (teams teamMap) touch(teamID string) (bool, error) {
 	if teams[teamID] != nil {
 		teams[teamID].lastHeartbeat = time.Now()
-		return nil
+		return false, nil
 	}
 
 	// TODO: hydrate from Redis or MySQL
@@ -78,7 +78,7 @@ func (teams teamMap) touch(teamID string) error {
 		},
 	}
 
-	return nil
+	return true, nil
 }
 
 func (team *teamData) resetLevelStates() {

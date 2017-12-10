@@ -223,9 +223,21 @@ function plot(map, t, pr, pc) {
 }
 
 var time = 0;
-
+var state;
 function handleState(level, startTime, ninjaX, ninjaY) {
-    plot(maps[level], (getTime() - startTime) / 1000, ninjaY, ninjaX);
+	state = [level, startTime, ninjaX, ninjaY];
+	tick();
+}
+
+function tick() {
+	if (state) {
+		level = state[0];
+		startTime = state[1];
+		ninjaX = state[2];
+		ninjaY = state[3];
+
+		plot(maps[level], (getTime() - startTime) / 1000, ninjaY, ninjaX);
+	}
 }
 
 function init() {
@@ -248,4 +260,6 @@ function init() {
 	if (event.key == 'c' || event.key == '3') move('SE');
     });
     clientInit();
+
+   setInterval(tick, 100);
 }

@@ -1,13 +1,47 @@
 /* eslint arrow-body-style: 0 */
 
 const HuntJS = require('huntjs-backend');
+const request = require('request');
+
 const DB = require('./db');
 
 DB.init();
 
 let fakeGameState = '1,1512620911301,1,28';
 
-HuntJS.post('/move', ({ data }) => {
+function simPostCommand(path) {
+  return new Promise((resolve, reject) => {
+    request.post(`${process.env.SIMULATION_SERVICE_ADDRESS}${path}`, (error, httpResponse, body) => {
+      const code = httpResponse && httpResponse.statusCode;
+
+      if (error) {
+        reject(error);
+      } else if (code < 200 || code >= 400) {
+        reject(new Error(`Got status code ${code} from ${process.env.SIMULATION_SERVICE_ADDRESS}${path}. Body: ${body}`));
+      } else {
+        resolve();
+      }
+    });
+  }).catch(e => console.log(`Error requesting ${path}`, e));
+}
+
+function simGetValue(path) {
+  return new Promise((resolve, reject) => {
+    request.post(`${process.env.SIMULATION_SERVICE_ADDRESS}/${path}`, (error, httpResponse, body) => {
+      const code = httpResponse.statusCode;
+
+      if (error) {
+        reject(error);
+      } else if (code < 200 || code >= 400) {
+        reject(new Error(`Got status code ${code} from ${path}. Body: ${body}`));
+      } else {
+        resolve(body);
+      }
+    });
+  });
+}
+
+HuntJS.post('/move', async ({ team, data }) => {
   if (!data || !data.direction) {
     throw HuntJS.Error(422, 'No direction given');
   }
@@ -16,8 +50,8 @@ HuntJS.post('/move', ({ data }) => {
     throw HuntJS.Error(422, 'Invalid direction');
   }
 
-  // TODO: send this to the simulation service
   console.log(`Got direction command: ${data.direction}`);
+  await simPostCommand(`/${team.id()}/move/${data.direction}`);
 
   return null;
 }, {
@@ -27,14 +61,28 @@ HuntJS.post('/move', ({ data }) => {
   },
 });
 
-HuntJS.post('/heartbeat', () => {
-  // TODO: send a heartbeat to the simulation service
+HuntJS.post('/moveUnlimited', async ({ team, data }) => {
+  if (!data || !data.direction) {
+    throw HuntJS.Error(422, 'No direction given');
+  }
+
+  if (!['N', 'E', 'S', 'W', 'NE', 'SE', 'SW', 'NW'].includes(data.direction)) {
+    throw HuntJS.Error(422, 'Invalid direction');
+  }
+
+  console.log(`Got direction command: ${data.direction}`);
+  await simPostCommand(`/${team.id()}/move/${data.direction}`);
+
   return null;
 });
 
-HuntJS.get('/currentTime', () => {
-  // TODO: query simulation service for its time
-  return Date.now();
+HuntJS.post('/heartbeat', async ({ team }) => {
+  simPostCommand(`/${team.id()}/heartbeat`);
+  return null;
+});
+
+HuntJS.get('/currentTime', async () => {
+  return Number(await simGetValue('/currentTime'));
 });
 
 HuntJS.get('/levelData', ({ data }) => {
@@ -62,7 +110,7 @@ HuntJS.get('/teamStatus', () => {
   };
 });
 
-HuntJS.post('/changeLevel', ({ data }) => {
+HuntJS.post('/changeLevel', async ({ data, team }) => {
   if (!data || !data.level) {
     throw HuntJS.Error(422, 'No level given');
   }
@@ -71,13 +119,12 @@ HuntJS.post('/changeLevel', ({ data }) => {
     throw HuntJS.Error(422, 'You haven\'t unlocked that level');
   }
 
-  // TODO: actually change the level
+  await simPostCommand(`/${team.id()}/changeLevel/${data.level}`);
   return 'fake level data';
 });
 
 HuntJS.onSubscribe('gameState', ({ team }) => {
-  // TODO: send a refresh request to the simulation service
-  console.log(`Got a new game state subscription for team ${team.id()}`);
+  simPostCommand(`/${team.id()}/refreshGameState`);
 });
 
 // For testing, clients can hit startFakeEmitters to send some garbage to the

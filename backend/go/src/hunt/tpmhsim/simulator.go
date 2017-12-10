@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"time"
+)
+
 // Commands from the API server
 type moveCommand struct {
 	teamID string
@@ -24,13 +29,33 @@ func startSimulator(
 ) {
 	teams := make(teamMap)
 
+	redis, err := newRedisConnection(config.RedisURL, config.MysqlDB)
+	if err != nil {
+		log.Fatalf("Fatal: could not connect to Redis: %s", err)
+	}
+
+	mysql, err := newMysqlConnection(
+		config.MysqlHost,
+		config.MysqlPort,
+		config.MysqlUser,
+		config.MysqlPassword,
+		config.MysqlDB)
+
+	lastPrintedStatsAt := time.Now()
+	frameDurations := []time.Duration{}
+
+	maxFrameDuration := time.Second / time.Duration(config.MaxFPS)
+	minSleepDuration := time.Millisecond * time.Duration(config.MinSleepMillis)
+
 	for {
+		frameStart := time.Now()
+
 		redisNeedsFlush := make(teamSet)
 		mysqlNeedsFlush := make(teamSet)
 
 		// Process commands from the channels
 		simulatorProcessMoves(moveChannel, teams, redisNeedsFlush)
-		simulatorProcessHeartbeats(heartbeatChannel, teams)
+		simulatorProcessHeartbeats(heartbeatChannel, teams, redisNeedsFlush)
 		simulatorProcessRefreshRequests(refreshGameStateChannel, redisNeedsFlush)
 		simulatorProcessLevelChanges(changeLevelChannel, teams, redisNeedsFlush, mysqlNeedsFlush)
 
@@ -44,7 +69,7 @@ func startSimulator(
 			teamLevelStatus := team.getLevelStatus()
 			teamLevelState := teamLevelStatus.state
 
-			didChange := teamLevelState.RunFrame()
+			didChange, messages := teamLevelState.RunFrame()
 
 			if didChange {
 				redisNeedsFlush[teamID] = true
@@ -59,15 +84,95 @@ func startSimulator(
 					mysqlNeedsFlush[teamID] = true
 				}
 			}
+
+			if (messages != nil) && (len(messages) > 0) {
+				for _, message := range messages {
+					go redis.publishMessage(teamID, message)
+				}
+			}
 		}
 
-		// Fush redis and mysql
+		// Flush redis and mysql
+		for teamID := range redisNeedsFlush {
+			levelStatus, err := teams.getLevelStatus(teamID)
+			if err != nil {
+				log.Errorf("Error fetching level status for team %s while flushing redis", teamID)
+				continue
+			}
+
+			go redis.flushRedis(teamID, levelStatus.state.Serialize())
+		}
+
+		for teamID := range mysqlNeedsFlush {
+			team := teams[teamID]
+			if team == nil {
+				log.Errorf("Error fetching level status for team %s while flushing redis", teamID)
+				continue
+			}
+
+			go mysql.flushMysql(teamID, &mysqlTeamData{
+				level: team.currentLevel,
+
+				level1Won:            team.levels[0].won,
+				level1UnlockedChunks: team.levels[0].unlockedChunks,
+
+				level2Won:            team.levels[1].won,
+				level2UnlockedChunks: team.levels[1].unlockedChunks,
+
+				level3Won:            team.levels[2].won,
+				level3UnlockedChunks: team.levels[2].unlockedChunks,
+			})
+		}
 
 		// Prune abandoned games
+		heartbeatCutoff := time.Now().Add(-1 * time.Duration(config.MinHeartbeatInterval) * time.Second)
+		numEvicted := 0
+		for teamID, team := range teams {
+			if team.lastHeartbeat.Before(heartbeatCutoff) {
+				delete(teams, teamID)
+				numEvicted++
+			}
+		}
+
+		if numEvicted > 0 {
+			log.Infof("Evicted %d teams", numEvicted)
+		}
 
 		// Log status
+		frameEnd := time.Now()
+		frameDuration := frameEnd.Sub(frameStart)
+		frameDurations = append(frameDurations, frameDuration)
+
+		if frameEnd.After(lastPrintedStatsAt.Add(time.Second)) {
+			// It's been a second since we printed stats
+			timeElapsed := frameEnd.Sub(lastPrintedStatsAt)
+			frameCount := len(frameDurations)
+			averageFrameDuration := averageDuration(frameDurations)
+
+			actualFPS := float64(frameCount) / timeElapsed.Seconds()
+			theoreticalMaxFPS := 1 / averageFrameDuration.Seconds()
+
+			log.Infow(fmt.Sprintf("Running at %.2f FPS", actualFPS),
+				"timeElapsed", timeElapsed,
+				"frameCount", frameCount,
+				"averageFrameDuration", averageFrameDuration,
+				"actualFPS", actualFPS,
+				"theoreticalMaxFPS", theoreticalMaxFPS,
+				"numTeams", len(teams))
+
+			// reset duration history
+			frameDurations = []time.Duration{}
+
+			lastPrintedStatsAt = frameEnd
+		}
 
 		// Sleep
+		sleepTime := maxFrameDuration - frameDuration
+		if sleepTime < minSleepDuration {
+			time.Sleep(minSleepDuration)
+		} else {
+			time.Sleep(sleepTime)
+		}
 	}
 }
 
@@ -78,12 +183,16 @@ func simulatorProcessMoves(moveChannel chan *moveCommand, teams teamMap, redisNe
 		case moveCmd := <-moveChannel:
 			teamID := moveCmd.teamID
 
-			err := teams.touch(teamID)
+			didLoad, err := teams.touch(teamID)
 			if err != nil {
 				log.Errorw("Encountered an error touching team state while processing move command",
 					"error", err,
 					"teamID", teamID)
 				continue
+			}
+
+			if didLoad {
+				redisNeedsFlush[teamID] = true
 			}
 
 			levelStatus, err := teams.getLevelStatus(teamID)
@@ -104,15 +213,19 @@ func simulatorProcessMoves(moveChannel chan *moveCommand, teams teamMap, redisNe
 	}
 }
 
-func simulatorProcessHeartbeats(heartbeatChannel chan string, teams teamMap) {
+func simulatorProcessHeartbeats(heartbeatChannel chan string, teams teamMap, redisNeedsFlush teamSet) {
 	for i := 0; i < config.MaxBufferLength; i++ {
 		select {
 		case teamID := <-heartbeatChannel:
-			err := teams.touch(teamID)
+			didLoad, err := teams.touch(teamID)
 			if err != nil {
 				log.Errorw("Encountered an error touching team state while processing heartbeat command",
 					"error", err,
 					"teamID", teamID)
+			}
+
+			if didLoad {
+				redisNeedsFlush[teamID] = true
 			}
 		default:
 			return
@@ -143,7 +256,7 @@ func simulatorProcessLevelChanges(
 			teamID := changeLevelCommand.teamID
 			newLevel := changeLevelCommand.newLevel
 
-			err := teams.touch(teamID)
+			_, err := teams.touch(teamID)
 			if err != nil {
 				log.Errorw("Encountered an error touching team state while processing changeLevel command",
 					"error", err,

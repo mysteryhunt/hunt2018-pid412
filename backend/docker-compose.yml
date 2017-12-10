@@ -11,10 +11,14 @@ services:
       MYSQL_PASSWORD: puzzle
     volumes:
       - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
 
   redis:
     image: redis:3.2.10
     restart: always
+    ports:
+      - "6379:6379"
 
   puzzle-dev:
     depends_on:
@@ -34,6 +38,7 @@ services:
       HUNT_REDIS_URL: 'redis://redis:6379'
       HUNT_PORT: 80
       HUNT_CORS_ORIGIN: '*'
+      SIMULATION_SERVICE_ADDRESS: 'http://docker.for.mac.localhost:8080'
     command: "/wait-for-it.sh db:3306 -- /wait-for-it.sh redis:6379 -- yarn start-mon"
     volumes:
       - ./wait-for-it.sh:/wait-for-it.sh
