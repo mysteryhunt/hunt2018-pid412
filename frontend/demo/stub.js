@@ -36,7 +36,7 @@ var ymap = {1: 28, 2: 28}
 var level = 1;
 
 function getTime() {
-    return time;
+    return time * 1000;
 }
 
 function changeLevel(num) {
