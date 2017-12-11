@@ -3,6 +3,9 @@ function move(direction) {
     actuallyMove(direction);
 }
 
+var darts = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+	     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+	     -1, -1, -1, -1];
 function actuallyMove(direction) {
     if (direction.indexOf('N') != -1) {
 	ninjaY -= 1;
@@ -16,6 +19,9 @@ function actuallyMove(direction) {
     if (direction.indexOf('E') != -1) {
 	ninjaX += 1;
     }
+    if (maps[level][ninjaY][ninjaX][0] == 'p') {
+	darts[parseInt(maps[level][ninjaY][ninjaX][2], 26)] = time * 1000;
+    }
     update();
 }
 
@@ -25,7 +31,11 @@ function clientInit() {
 }
 
 function update() {
-    handleState(level, 0, ninjaX, ninjaY);
+    var args = [level, 0, ninjaX, ninjaY];
+    if (level == 2) {
+	args = args.concat(darts);
+    }
+    handleState.apply(null, args);
 }
 
 var time = 0;

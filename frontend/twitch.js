@@ -92,39 +92,39 @@ maps[1] = [['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	  ];
 maps[2] = [['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
-	    'w  ','w  ','dv ','dv ','dv ','dv ','dv ','w  ','w  ','w  '],
-	   ['w  ','fB ','fB ','fB ','f  ','f  ','p  ','f  ','f  ','f  ',
-	    'f  ','p  ','f  ','f  ','f  ','f  ','d< ','fB ','f! ','g  ',
+	    'w  ','w  ','dv9','dvA','dvB','dvC','dvD','w  ','w  ','w  '],
+	   ['d>5','fB ','fB ','fB ','f  ','f  ','p 5','f  ','f  ','f  ',
+	    'f  ','p 6','f  ','f  ','f  ','f  ','d<6','fB ','f! ','g  ',
 	    'f  ','l  ','l  ','l  ','l  ','l  ','l  ','f  ','f  ','w  '],
 	   ['w  ','fB ','fB ','f! ','g  ','f  ','w  ','w  ','w  ','f  ',
 	    'w  ','w  ','w  ','f  ','w  ','f  ','w  ','f! ','f! ','f0 ',
-	    'f  ','l  ','l  ','p  ','f  ','p  ','l  ','f  ','f  ','d< '],
+	    'f  ','l  ','l  ','p E','f  ','p L','l  ','f  ','f  ','d<E'],
 	   ['w  ','f! ','f! ','f! ','f0 ','f  ','w  ','f  ','w  ','w  ',
 	    'w  ','f  ','w  ','w  ','w  ','f  ','w  ','f! ','f0 ','f0 ',
-	    'f  ','l  ','p  ','l  ','p  ','l  ','p  ','f  ','f  ','d< '],
-	   ['w  ','f! ','f0 ','f0 ','f  ','f  ','d> ','f  ','f  ','f  ',
-	    'f  ','f  ','p  ','f  ','f  ','f  ','w  ','f0 ','f0 ','f  ',
-	    'f  ','f  ','f  ','p  ','l  ','p  ','f  ','f  ','f  ','d< '],
+	    'f  ','l  ','p F','l  ','p M','l  ','p K','f  ','f  ','d<F'],
+	   ['w  ','f! ','f0 ','f0 ','f  ','f  ','d>7','f  ','f  ','f  ',
+	    'f  ','f  ','p 7','f  ','f  ','f  ','w  ','f0 ','f0 ','f  ',
+	    'f  ','f  ','f  ','p G','l  ','p L','f  ','f  ','f  ','d<G'],
 	   ['w  ','f  ','f0 ','f0 ','f  ','f  ','w  ','f  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','f  ','f  ','l  ',
-	    'f  ','f  ','f  ','p  ','l  ','p  ','f  ','f  ','f  ','d< '],
-	   ['w  ','f  ','f  ','f  ','f  ','f  ','d> ','f  ','f  ','p  ',
+	    'f  ','f  ','f  ','p H','l  ','p C','f  ','f  ','f  ','d<H'],
+	   ['w  ','f  ','f  ','f  ','f  ','f  ','d>8','f  ','f  ','p 8',
 	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','l  ',
-	    'l  ','l  ','p  ','l  ','p  ','l  ','p  ','f  ','f  ','d< '],
+	    'l  ','l  ','p I','l  ','p B','l  ','p D','f  ','f  ','d<I'],
 	   ['w  ','f  ','f  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
-	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','dv ','w  ',
-	    'l  ','l  ','l  ','p  ','f  ','p  ','l  ','f  ','f  ','d< '],
-	   ['w  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','p  ','f  ',
-	    'f  ','f  ','f  ','d< ','f  ','f  ','f  ','f  ','f  ','w  ',
+	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','dv2','w  ',
+	    'l  ','l  ','l  ','p A','f  ','p C','l  ','f  ','f  ','d<J'],
+	   ['w  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','p 3','f  ',
+	    'f  ','f  ','f  ','d<3','f  ','f  ','f  ','f  ','f  ','w  ',
 	    'l  ','l  ','l  ','l  ','l  ','l  ','l  ','f  ','x  ','w  '],
 	   ['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
-	    'w  ','f  ','f  ','d> ','fB ','f  ','f  ','p  ','f  ','w  ',
-	    'w  ','w  ','d^ ','d^ ','d^ ','d^ ','d^ ','w  ','w  ','w  '],
+	    'w  ','f  ','f  ','d>4','fB ','f  ','f  ','p 4','f  ','w  ',
+	    'w  ','w  ','d^O','d^N','d^M','d^L','d^K','w  ','w  ','w  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
 	    'w  ','f  ','f  ','w  ','fB ','fB ','fB ','f  ','f  ','w  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
-	    'w  ','f  ','f  ','f  ','fB ','fB ','f! ','g  ','p  ','w  ',
+	    'w  ','f  ','f  ','f  ','fB ','fB ','f! ','g  ','p 2','w  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
 	    'w  ','f  ','f  ','f  ','f! ','f! ','f! ','f0 ','f  ','w  ',
@@ -136,7 +136,7 @@ maps[2] = [['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','f  ','l  ','l  ','l  ','f0 ','f0 ','f  ','f  ','w  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
-	    'w  ','l  ','l  ','l  ','f  ','f  ','p  ','f  ','f  ','d< ',
+	    'w  ','l  ','l  ','l  ','f  ','f  ','p 1','f  ','f  ','d<1',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
 	    'w  ','l  ','l  ','f  ','f  ','f  ','f  ','f  ','l  ','w  ',
@@ -145,7 +145,7 @@ maps[2] = [['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','l  ','f  ','f  ','f  ','f  ','f  ','l  ','l  ','w  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
-	    'w  ','f  ','p  ','f  ','f  ','f  ','l  ','l  ','l  ','d< ',
+	    'w  ','f  ','p 0','f  ','f  ','f  ','l  ','l  ','l  ','d<0',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
 	    'w  ','f  ','f  ','l  ','l  ','l  ','l  ','l  ','l  ','w  ',
@@ -187,7 +187,49 @@ var guardCycleLen = 22;
 
 var windowSize = 11;
 
-function plot(map, t, pr, pc) {
+function plot(level, map, t, pr, pc, rest) {
+    // First, preprocess moving things.
+    var dartmap = {};
+    if (level == 2) {
+	var launchmap = {};
+	for (var i = 0; i < rest.length; ++i) {
+	    if (rest[i] > 0) {
+		launchmap[i] = rest[i] / 1000;
+	    }
+	}
+	for (var r = 0; r < map.length; ++r) {
+	    for (var c = 0; c < map[0].length; ++c) {
+		var index = parseInt(map[r][c][2], 26);
+		if (map[r][c][0] == 'd' && index in launchmap) {
+		    var dr = 0;
+		    var dc = 0;
+		    if (map[r][c][1] == 'v') dr = 1;
+		    if (map[r][c][1] == '^') dr = -1;
+		    if (map[r][c][1] == '>') dc = 1;
+		    if (map[r][c][1] == '<') dc = -1;
+		    var dartr = r;
+		    var dartc = c;
+		    var inflight = true;
+		    //console.log(launchmap[index], t);
+		    for (var flight = 0; flight < (t - launchmap[index]) / 2;
+			 ++flight) {
+			dartr += dr;
+			dartc += dc;
+			if (map[dartr][dartc][0] == 'w' ||
+			    map[dartr][dartc][0] == 'd') {
+			    inflight = false;
+			    break;
+			}
+		    }
+		    if (inflight) {
+			dartmap[[dartr, dartc]] = map[r][c][1];
+		    }
+		}
+	    }
+	}
+    }
+    //console.log(dartmap);
+    
     var html = '';
     var ro = pr - (windowSize - 1)/2;
     if (ro < 0) ro = 0;
@@ -199,14 +241,18 @@ function plot(map, t, pr, pc) {
 	html += '<tr>';
 	for (var col = 0; col < windowSize; ++col) {
 	    var icon = map[row + ro][col + co][0];
-	    if (map[row + ro][col + co][2] != ' ' && (
+	    if (icon != 'p' && icon != 'd' &&
+		map[row + ro][col + co][2] != ' ' && (
 		(t - parseInt(map[row + ro][col + co][2], 26)
 		 + platCycleLen) % platCycleLen
 		    < platCycleLen / 2)) {
 		icon = 't';
 	    }
 	    html += '<td class="' + icon + '">'
-	    if (map[row + ro][col + co][1] != ' ' && (
+	    if ([row+ro, col+co] in dartmap) {
+		html += dartmap[[row+ro, col+co]];
+	    } else if (icon != 'p' && icon != 'd' &&
+		map[row + ro][col + co][1] != ' ' && (
 		map[row + ro][col + co][1] == '!' || 
 		(t - parseInt(map[row + ro][col + co][1], 26)
 		 + guardCycleLen) % guardCycleLen
@@ -226,19 +272,22 @@ function plot(map, t, pr, pc) {
 var time = 0;
 var state;
 function handleState(level, startTime, ninjaX, ninjaY) {
-	state = [level, startTime, ninjaX, ninjaY];
-	tick();
+    var rest = Array.prototype.slice.call(arguments, 4);
+    state = [level, startTime, ninjaX, ninjaY, rest];
+    tick();
 }
 
 function tick() {
-	if (state) {
-		level = state[0];
-		startTime = state[1];
-		ninjaX = state[2];
-		ninjaY = state[3];
-
-		plot(maps[level], (getTime() - startTime) / 1000, ninjaY, ninjaX);
-	}
+    if (state) {
+	level = state[0];
+	startTime = state[1];
+	ninjaX = state[2];
+	ninjaY = state[3];
+	rest = state[4];
+	
+	plot(level, maps[level], (getTime() - startTime) / 1000, ninjaY, ninjaX,
+	    rest);
+    }
 }
 
 function init() {
