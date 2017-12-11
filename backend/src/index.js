@@ -27,13 +27,13 @@ function simPostCommand(path) {
 
 function simGetValue(path) {
   return new Promise((resolve, reject) => {
-    request.post(`${process.env.SIMULATION_SERVICE_ADDRESS}/${path}`, (error, httpResponse, body) => {
+    request.get(`${process.env.SIMULATION_SERVICE_ADDRESS}${path}`, (error, httpResponse, body) => {
       const code = httpResponse.statusCode;
 
       if (error) {
         reject(error);
       } else if (code < 200 || code >= 400) {
-        reject(new Error(`Got status code ${code} from ${path}. Body: ${body}`));
+        reject(new Error(`Got status code ${code} from ${process.env.SIMULATION_SERVICE_ADDRESS}${path}. Body: ${body}`));
       } else {
         resolve(body);
       }

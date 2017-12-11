@@ -16,7 +16,11 @@ function wait(time) {
 }
 
 function clientInit() {
+    // To connect to the dev backend
     client = HuntJSClient.connect('tpmh', 'http://localhost:8000');
+
+    // To connect to the prod backend
+    // client = HuntJSClient.connect('tpmh', 'https://puzzle-tpmh.head-hunters.org');
 
     function heartbeat() {
         client.post('/heartbeat')
@@ -38,10 +42,12 @@ function clientInit() {
     });
 
     client.subscribe('notifications', msg => toastr.info(msg));
+
+    TimeSync.start(client);
 }
 
 function getTime() {
-    return Date.now();
+    return TimeSync.getTime();
 }
 
 function move(direction) {
