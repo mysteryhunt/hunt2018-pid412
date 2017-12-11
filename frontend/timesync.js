@@ -29,11 +29,11 @@ TimeSync = (function() {
     });
 
     var samplesToAverage = samples.slice(0, 3);
-    offset = average(samplesToAverage.map(s => s.offset));
+    computedOffset = average(samplesToAverage.map(s => s.offset));
 
-    if (lastLoggedAt == null || (Math.abs(lastLoggedAt - offset) > 100)) {
-      lastLoggedAt = offset;
-      console.log('New timesync offset:', offset)
+    if (lastLoggedAt == null || (Math.abs(lastLoggedAt - computedOffset) > 100)) {
+      lastLoggedAt = computedOffset;
+      console.log('New timesync offset:', computedOffset)
     }
   }
 
@@ -70,7 +70,7 @@ TimeSync = (function() {
     },
 
     getTime() {
-      return Date.now() + computedOffset;
+      return Date.now() - computedOffset;
     }
   }
 })();
