@@ -9,12 +9,4 @@
       .p { background-color: white; }
       .d { background-color: orange; }
       .p { background-color: yellow; }
-      body { background-color: black; }
-
-      #notification {
-	  min-height: 50px;
-	  padding: 10px;
-      }
-      p {
-	  background-color: lightgrey;
-      }
+      table { background-color: black; padding: 10px; margin: 10px; float: left; }
