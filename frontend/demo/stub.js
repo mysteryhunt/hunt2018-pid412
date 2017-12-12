@@ -44,8 +44,8 @@ function update() {
 var time = 0;
 var ninjaX = 1;
 var ninjaY = 28;
-var xmap = {1: 1, 2: 18}
-var ymap = {1: 28, 2: 28}
+var xmap = {1: 1, 2: 18, 3: 1}
+var ymap = {1: 28, 2: 28, 3: 24}
 var level = 1;
 
 function getTime() {

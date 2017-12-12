@@ -1,15 +1,22 @@
-.w { background: url(img/w.png) }
-.f { background: url(img/f.png) }
-.t { background: url(img/t.png), url(img/l.png) }
-.l { background: url(img/l.png) }
-.x1 { background: url(img/x1.png), url(img/f.png) }
+.w { background-image: url(img/w.png) }
+.f { background-image: url(img/f.png) }
+.t { background-image: url(img/t.png), url(img/l.png) }
+.l { background-image: url(img/l.png) }
+.x1 { background-image: url(img/x1.png), url(img/f.png) }
 .x2 { background-color: purple; }
 .x3 { background-color: purple; }
 .v { background-color: black; }
-.g { background: url(img/gl.png), url(img/f.png) }
-.gr { background: url(img/gr.png), url(img/f.png) }
-.p { background-color: white; }
-.d { background-color: orange; }
+.g { background-image: url(img/gl.png), url(img/f.png) }
+.gr { background-image: url(img/gr.png), url(img/f.png) }
+.p { background-image: url(img/p.png), url(img/f.png) }
+.dn { background-image: url(img/dn.png), url(img/w.png) }
+.ds { background-image: url(img/ds.png), url(img/w.png) }
+.de { background-image: url(img/de.png), url(img/w.png) }
+.dw { background-image: url(img/dw.png), url(img/w.png) }
+.an { background-image: url(img/an.png); }
+.as { background-image: url(img/as.png); }
+.ae { background-image: url(img/ae.png); }
+.aw { background-image: url(img/aw.png); }
 .player { background-image: url(img/player.png) }
 table { background-color: black; margin: 10px; float: left; }
 td { padding: 0; position: relative; }
