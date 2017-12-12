@@ -186,12 +186,12 @@ maps[3] = [['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  '],
 	   ['w  ','f0 ','f0 ','f  ','f  ','f  ','f  ','f  ','f  ','f  ',
 	    'f  ','f  ','f  ','w  ','f  ','f  ','f  ','f  ','f  ','f  ',
-	    'f  ','f  ','f  ','s  ','f  ','f  ','f  ','s  ','x  ','w  '],
+	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','x  ','w  '],
 	   ['w  ','f! ','l! ','l0 ','l  ','f  ','w  ','w  ','w  ','w  ',
 	    'f  ','f  ','f  ','w  ','f  ','f  ','f  ','f  ','f  ','l  ',
 	    'f  ','f  ','f  ','w  ','f  ','w  ','f  ','w  ','f  ','w  '],
-	   ['w  ','fB ','l! ','g  ','l  ','f  ','w  ','s  ','f  ','f  ',
-	    'f  ','f  ','f  ','w  ','s  ','f  ','f  ','f  ','f  ','f  ',
+	   ['w  ','fB ','l! ','g  ','l  ','f  ','w  ','f  ','f  ','f  ',
+	    'f  ','f  ','f  ','w  ','f  ','f  ','f  ','f  ','f  ','f  ',
 	    'f  ','w  ','f  ','w  ','f  ','w  ','f  ','w  ','f  ','w  '],
 	   ['w  ','fB ','lB ','l  ','l  ','f  ','w  ','f  ','f  ','f  ',
 	    'f  ','l  ','f  ','w  ','w  ','w  ','w  ','f  ','f  ','f  ',
@@ -218,56 +218,56 @@ maps[3] = [['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  '],
 	   ['w  ','f  ','w  ','w  ','f  ','f  ','f  ','f  ','f  ','f  ',
-	    'f  ','f  ','f  ','f  ','s  ','f  ','f  ','f  ','w  ','f  ',
+	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','w  ','f  ',
 	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','w  '],
 	   ['w  ','f  ','w  ','f  ','f  ','f0 ','f0 ','f  ','f  ','f  ',
 	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','w  ','f  ',
-	    'f  ','s  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','w  '],
+	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','w  '],
 	   ['w  ','f  ','f  ','f  ','f! ','f0 ','f0 ','f  ','f  ','f  ',
 	    'f  ','f  ','l  ','l  ','l  ','l  ','f  ','f  ','w  ','f  ',
 	    'f  ','f  ','f  ','f  ','w  ','w  ','w  ','f  ','w  ','w  '],
 	   ['w  ','f  ','f  ','f  ','f! ','f! ','l! ','l0 ','l  ','f  ',
 	    'f  ','f  ','l  ','l  ','l  ','l  ','f  ','f  ','w  ','f  ',
 	    'f  ','f  ','f  ','f  ','w  ','f  ','f  ','f  ','f  ','w  '],
-	   ['w  ','f  ','s  ','f  ','fB ','fB ','l! ','g  ','l  ','f  ',
+	   ['w  ','f  ','f  ','f  ','fB ','fB ','l! ','g  ','l  ','f  ',
 	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','w  ','w  ',
 	    'w  ','w  ','f  ','w  ','w  ','f  ','f  ','f  ','f  ','w  '],
 	   ['w  ','f  ','f  ','f  ','fB ','fB ','lB ','l  ','l  ','f  ',
-	    'f  ','f  ','f  ','f  ','s  ','f  ','f  ','f  ','f  ','f  ',
-	    'f  ','f  ','f  ','w  ','f  ','f  ','f  ','f  ','f  ','w  '],
+	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ',
+	    'f  ','f  ','f  ','w  ','f  ','f  ','f0 ','f0 ','f  ','w  '],
 	   ['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
-	    'w  ','w  ','w  ','w  ','f  ','f  ','f  ','f  ','f  ','w  '],
+	    'w  ','w  ','w  ','w  ','f  ','f! ','f0 ','f0 ','f  ','w  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
-	    'v  ','v  ','v  ','w  ','f  ','f  ','f  ','f  ','f  ','w  '],
+	    'v  ','v  ','v  ','w  ','f  ','f! ','f! ','l! ','l0 ','w  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
-	    'v  ','v  ','v  ','w  ','f  ','f  ','f  ','f  ','f  ','w  '],
+	    'v  ','v  ','v  ','w  ','f  ','fB ','fB ','l! ','g  ','w  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
-	    'v  ','v  ','v  ','w  ','f  ','f  ','f  ','f  ','f  ','w  '],
+	    'v  ','v  ','v  ','w  ','f  ','fB ','fB ','lB ','l  ','w  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
-	    'v  ','v  ','v  ','w  ','f  ','f  ','f  ','f  ','f  ','w  '],
+	    'v  ','v  ','v  ','w  ','f  ','fB ','f  ','f  ','f  ','w  '],
 	   ['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
-	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  '],
-	   ['w  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ',
-	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ',
+	    'w  ','w  ','w  ','w  ','l  ','f  ','f  ','f  ','f  ','w  '],
+	   ['w  ','f  ','f  ','f  ','l  ','l  ','l  ','l  ','l  ','l  ',
+	    'l  ','l  ','l  ','l  ','l  ','l  ','l  ','l  ','l  ','l  ',
+	    'l  ','l  ','l  ','l  ','l  ','l  ','f  ','f  ','f  ','w  '],
+	   ['w  ','f  ','f0 ','f0 ','f  ','f  ','f  ','f0 ','f0 ','f  ',
+	    'f  ','f  ','f0 ','f0 ','f  ','f  ','f  ','f0 ','f0 ','f  ',
+	    'f  ','f  ','l  ','l  ','f  ','f  ','f  ','f  ','f  ','w  '],
+	   ['w  ','f! ','f0 ','f0 ','f  ','f  ','f! ','f0 ','f0 ','f  ',
+	    'f  ','f! ','f0 ','f0 ','f  ','f  ','f! ','f0 ','f0 ','f  ',
 	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','w  '],
-	   ['w  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ',
-	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ',
-	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','w  '],
-	   ['w  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ',
-	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ',
-	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','w  '],
-	   ['w  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ',
-	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ',
-	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','w  '],
-	   ['w  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ',
-	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ',
-	    'f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','w  '],
+	   ['w  ','l! ','l! ','l! ','l0 ','l  ','l! ','l! ','l! ','l0 ',
+	    'l  ','l! ','l! ','l! ','l0 ','l  ','l! ','l! ','l! ','l0 ',
+	    'l  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','w  '],
+	   ['w  ','lB ','lB ','l! ','g  ','l  ','lB ','lB ','l! ','g  ',
+	    'l  ','lB ','lB ','l! ','g  ','l  ','lB ','lB ','l! ','g  ',
+	    'l  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','w  '],
 	   ['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  '],
@@ -278,7 +278,7 @@ var guardCycleLen = 22;
 
 var windowSize = 11;
 
-function plot(level, map, t, pr, pc, rest) {
+function plot(level, map, time, startTime, pr, pc, rest) {
     // First, preprocess moving things.
     var dartmap = {};
     if (level == 2) {
@@ -301,8 +301,8 @@ function plot(level, map, t, pr, pc, rest) {
 		    var dartr = r;
 		    var dartc = c;
 		    var inflight = true;
-		    //console.log(launchmap[index], t);
-		    for (var flight = 0; flight < (t - launchmap[index]) / 2;
+		    //console.log(launchmap[index], time);
+		    for (var flight = 0; flight < (time - launchmap[index]) / 2;
 			 ++flight) {
 			dartr += dr;
 			dartc += dc;
@@ -319,8 +319,23 @@ function plot(level, map, t, pr, pc, rest) {
 	    }
 	}
     }
-    //console.log(dartmap);
-    
+    var statuemap = {};
+    if (level == 3) {
+	for (var i = 0; i < rest.length; i += 4) {
+	    var statue;
+	    if (rest[i] < 0) {
+		statue = 'ss';
+	    } else if (rest[i] - time >= 2) {
+		statue = 'sa';
+	    } else {
+		statue = 'sw';
+	    }
+	    statuemap[[rest[i+3], rest[i+2]]] = statue;
+	}
+    }
+    //console.log(statuemap);
+
+    var t = time - startTime;
     var html = '';
     var ro = pr - (windowSize - 1)/2;
     if (ro < 0) ro = 0;
@@ -365,6 +380,10 @@ function plot(level, map, t, pr, pc, rest) {
 	    if (row + ro == pr && col + co == pc) {
 		html += '<span class="player"></span>';
 	    }
+	    if ([row+ro, col+co] in statuemap) {
+		html += '<span class="' + statuemap[[row+ro, col+co]]
+		    + '"></span>';
+	    }
 	    if ([row+ro, col+co] in dartmap) {
 		html += '<span class="a' + dartmap[[row+ro, col+co]]
 		    + '"></span>';
@@ -393,7 +412,9 @@ function tick() {
 	ninjaY = state[3];
 	rest = state[4];
 	
-	plot(level, maps[level], (getTime() - startTime) / 1000, ninjaY, ninjaX,
+	plot(level, maps[level], getTime() / 1000,
+	     startTime / 1000,
+	     ninjaY, ninjaX,
 	    rest);
     }
 }

@@ -6,6 +6,15 @@ function move(direction) {
 var darts = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 	     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 	     -1, -1, -1, -1];
+var statues = [-1, 0, 23, 28,
+	       0, 0, 21, 13,
+	       3, 0, 14, 17,
+	       -1, 0, 14, 12,
+	       0, 0, 2, 16,
+	       3, 0, 7, 3,
+	       -1, 0, 14, 3,
+	       0, 0, 23, 1,
+	       3, 0, 27, 1]
 function actuallyMove(direction) {
     if (direction.indexOf('N') != -1) {
 	ninjaY -= 1;
@@ -37,6 +46,14 @@ function update() {
     var args = [level, 0, ninjaX, ninjaY];
     if (level == 2) {
 	args = args.concat(darts);
+    }
+    if (level == 3) {
+	args = args.concat(statues);
+	for (var i = 4; i < args.length; i += 4) {
+	    if (args[i] >= 0) {
+		args[i] += time;
+	    }
+	}
     }
     handleState.apply(null, args);
 }
