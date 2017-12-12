@@ -20,6 +20,7 @@
 .ss { background-image: url(img/ss.png); }
 .sw { background-image: url(img/sw.png); }
 .sa { background-image: url(img/sa.png); }
+.o { background-image: url(img/o.png); }
 .player { background-image: url(img/player.png) }
 table { background-color: black; margin: 10px; float: left; }
 td { padding: 0; position: relative; }

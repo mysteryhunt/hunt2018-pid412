@@ -369,14 +369,6 @@ function plot(level, map, time, startTime, pr, pc, rest) {
 	    }
 	    html += '<td class="' + icon + '">';
 	    
-	    if (icon != 'p' && icon[0] != 'd' && icon[0] != 'g' &&
-		map[row + ro][col + co][1] != ' ' && (
-		map[row + ro][col + co][1] == '!' || 
-		(t - parseInt(map[row + ro][col + co][1], 26)
-		 + guardCycleLen) % guardCycleLen
-		    < guardCycleLen / 2)) {
-		html += 'o';
-	    }
 	    if (row + ro == pr && col + co == pc) {
 		html += '<span class="player"></span>';
 	    }
@@ -387,6 +379,14 @@ function plot(level, map, time, startTime, pr, pc, rest) {
 	    if ([row+ro, col+co] in dartmap) {
 		html += '<span class="a' + dartmap[[row+ro, col+co]]
 		    + '"></span>';
+	    }
+	    if (icon != 'p' && icon[0] != 'd' && icon[0] != 'g' &&
+		map[row + ro][col + co][1] != ' ' && (
+		map[row + ro][col + co][1] == '!' || 
+		(t - parseInt(map[row + ro][col + co][1], 26)
+		 + guardCycleLen) % guardCycleLen
+		    < guardCycleLen / 2)) {
+		html += '<span class="o"></span>';
 	    }
 	    html += '</td>';
 	}
