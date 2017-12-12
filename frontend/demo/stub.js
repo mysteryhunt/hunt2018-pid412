@@ -26,7 +26,10 @@ function actuallyMove(direction) {
 }
 
 function clientInit() {
-    setInterval(function(){ ++time; update(); }, 1000);
+    setInterval(function(){
+	++time;
+	update();
+    }, 1000);
     update();
 }
 

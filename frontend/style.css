@@ -1,12 +1,17 @@
-      .w { background-color: green; }
-      .f { background-color: lightgrey; }
-      .t { background-color: yellow; }
-      .l { background-color: red; }
-      .x { background-color: purple; }
-      .v { background-color: black; }
-      .o { background-color: lightblue; }
-      .g { background-color: grey; }
-      .p { background-color: white; }
-      .d { background-color: orange; }
-      .p { background-color: yellow; }
-      table { background-color: black; padding: 10px; margin: 10px; float: left; }
+.w { background: url(img/w.png) }
+.f { background: url(img/f.png) }
+.t { background: url(img/t.png), url(img/l.png) }
+.l { background: url(img/l.png) }
+.x1 { background: url(img/x1.png), url(img/f.png) }
+.x2 { background-color: purple; }
+.x3 { background-color: purple; }
+.v { background-color: black; }
+.g { background: url(img/gl.png), url(img/f.png) }
+.gr { background: url(img/gr.png), url(img/f.png) }
+.p { background-color: white; }
+.d { background-color: orange; }
+.player { background-image: url(img/player.png) }
+table { background-color: black; margin: 10px; float: left; }
+td { padding: 0; position: relative; }
+span { width: 100%; height: 100%; display: block; position: absolute;
+       left: 0; top: 0}

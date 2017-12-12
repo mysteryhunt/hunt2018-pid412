@@ -10,7 +10,7 @@ maps[1] = [['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'f  ','f  ','l  ','l 6','l 7','l  ','f  ','f  ','f  ','w  '],
 	   ['w  ','f  ','f  ','f  ','l  ','l  ','l  ','l  ','l  ','l  ',
 	    'l  ','l  ','l 4','l 6','l 0','l 2','l 4','fB ','fB ','fB ',
-	    'g  ','f  ','l  ','l  ','l  ','l 5','f  ','f  ','f  ','w  '],
+	    'g0 ','f  ','l  ','l  ','l  ','l 5','f  ','f  ','f  ','w  '],
 	   ['w  ','f  ','f  ','f  ','l  ','l  ','l  ','l  ','l 2','l 4',
 	    'l 6','l 0','l 2','l  ','l  ','l  ','l  ','fB ','fB ','fB ',
 	    'f  ','f  ','l 3','l 3','l  ','l  ','f  ','f  ','f  ','w  '],
@@ -20,11 +20,11 @@ maps[1] = [['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	   ['w  ','fB ','f  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','l  ','l  ','l  ','l  ','l  ','l  ',
 	    'f  ','f  ','l  ','l  ','l 2','l 5','f  ','f  ','f  ','w  '],
-	   ['w  ','fB ','g  ','f0 ','f0 ','f0 ','f  ','fB ','fB ','fB ',
+	   ['w  ','fB ','g0 ','f0 ','f0 ','f0 ','f  ','fB ','fB ','fB ',
 	    'f  ','f0 ','f0 ','w  ','l  ','l  ','l  ','l  ','l  ','l  ',
 	    'f  ','f  ','l 3','l 3','l  ','l  ','f  ','f  ','f  ','w  '],
 	   ['w  ','fB ','f  ','f0 ','f0 ','f0 ','f  ','fB ','fB ','fB ',
-	    'g  ','f0 ','f0 ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
+	    'g0 ','f0 ','f0 ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'f  ','f  ','l  ','l 6','l 7','l  ','f  ','f  ','f  ','w  '],
 	   ['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','f0 ','f0 ','f0 ','f  ','f  ','f  ','f  ','f  ','w  ',
@@ -36,7 +36,7 @@ maps[1] = [['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','l  ','lB ','lB ','lB ','l  ','l0 ','l06','l02','w  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
-	    'w  ','f  ','fB ','fB ','fB ','g  ','f0 ','f0 ','f0 ','w  ',
+	    'w  ','f  ','fB ','fB ','fB ','g0 ','f0 ','f0 ','f0 ','w  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
 	    'w  ','f  ','fB ','fB ','fB ','f  ','f0 ','f0 ','f0 ','w  ',
@@ -48,7 +48,7 @@ maps[1] = [['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','f  ','f0 ','f0 ','f0 ','f  ','f  ','f  ','f  ','w  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
-	    'w  ','g  ','f0 ','f0 ','f0 ','f  ','f  ','f  ','f  ','w  ',
+	    'w  ','g0 ','f0 ','f0 ','f0 ','f  ','f  ','f  ','f  ','w  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
 	    'w  ','l  ','l0 ','l0 ','l0 ','lB ','l  ','f  ','f  ','w  ',
@@ -57,30 +57,30 @@ maps[1] = [['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','f  ','f  ','f  ','f0 ','fB ','fB ','fB ','f  ','w  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
-	    'w  ','f  ','f  ','f  ','f  ','fB ','fB ','fB ','g  ','w  ',
+	    'w  ','f  ','f  ','f  ','f  ','fB ','fB ','fB ','g0 ','w  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  '],
 	   ['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','f  ','f  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  '],
-	   ['w  ','fB ','g  ','f0 ','f0 ','f0 ','f  ','f  ','f  ','f  ',
-	    'w  ','f  ','f  ','w  ','g  ','f0 ','f0 ','f0 ','f  ','l 6',
+	   ['w  ','fB ','g0 ','f0 ','f0 ','f0 ','f  ','f  ','f  ','f  ',
+	    'w  ','f  ','f  ','w  ','g0 ','f0 ','f0 ','f0 ','f  ','l 6',
 	    'l 3','l 0','f  ','f  ','f  ','f  ','f  ','f  ','f  ','w  '],
 	   ['w  ','fB ','f  ','f0 ','w  ','w  ','fB ','f  ','f0 ','f0 ',
 	    'w  ','f  ','f  ','w  ','f  ','f0 ','f0 ','w  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','f  ','w  '],
-	   ['w  ','f  ','f  ','f  ','w  ','w  ','fB ','g  ','f0 ','f0 ',
+	   ['w  ','f  ','f  ','f  ','w  ','w  ','fB ','g0 ','f0 ','f0 ',
 	    'w  ','f  ','f  ','w  ','f  ','f  ','f  ','f  ','f  ','f  ',
 	    'w  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','f  ','w  '],
 	   ['w  ','f  ','f0 ','f0 ','w  ','w  ','fB ','f  ','f0 ','f0 ',
 	    'w  ','f  ','f  ','w  ','w  ','w  ','w  ','w  ','f  ','f  ',
 	    'w  ','fB ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  '],
-	   ['w  ','g  ','f0 ','f0 ','w  ','w  ','f  ','f  ','f  ','f  ',
+	   ['w  ','g0 ','f0 ','f0 ','w  ','w  ','f  ','f  ','f  ','f  ',
 	    'w  ','f  ','f0 ','f0 ','f0 ','f  ','f  ','f  ','f  ','f  ',
-	    'w  ','fB ','fB ','fB ','g  ','f0 ','f0 ','f0 ','f  ','w  '],
+	    'w  ','fB ','fB ','fB ','g0 ','f0 ','f0 ','f0 ','f  ','w  '],
 	   ['w  ','f  ','f0 ','f0 ','w  ','w  ','fB ','fB ','f  ','f0 ',
-	    'w  ','g  ','f0 ','f0 ','f0 ','f  ','f  ','f  ','f  ','f  ',
+	    'w  ','g0 ','f0 ','f0 ','f0 ','f  ','f  ','f  ','f  ','f  ',
 	    'w  ','fB ','fB ','fB ','f  ','f0 ','f0 ','f0 ','f  ','w  '],
-	   ['w  ','f  ','f  ','f  ','w  ','w  ','fB ','fB ','g  ','f0 ',
+	   ['w  ','f  ','f  ','f  ','w  ','w  ','fB ','fB ','g0 ','f0 ',
 	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','f  ','w  '],
 	   ['w  ','f  ','f  ','f  ','w  ','w  ','fB ','fB ','f  ','f0 ',
@@ -241,25 +241,36 @@ function plot(level, map, t, pr, pc, rest) {
 	html += '<tr>';
 	for (var col = 0; col < windowSize; ++col) {
 	    var icon = map[row + ro][col + co][0];
-	    if (icon != 'p' && icon != 'd' &&
+	    if (icon != 'p' && icon != 'd' && icon != 'g' &&
 		map[row + ro][col + co][2] != ' ' && (
 		(t - parseInt(map[row + ro][col + co][2], 26)
 		 + platCycleLen) % platCycleLen
 		    < platCycleLen / 2)) {
 		icon = 't';
 	    }
-	    html += '<td class="' + icon + '">'
+	    if (icon == 'g' && map[row + ro][col + co][1] != ' ' && (
+                map[row + ro][col + co][1] == '!' ||
+                (t - parseInt(map[row + ro][col + co][1], 26)
+                 + guardCycleLen) % guardCycleLen
+                    < guardCycleLen / 2)) {
+		icon = 'gr';
+	    }
+	    if (icon == 'x') {
+		icon += level;
+	    }
+	    html += '<td class="' + icon + '">';
 	    if ([row+ro, col+co] in dartmap) {
 		html += dartmap[[row+ro, col+co]];
-	    } else if (icon != 'p' && icon != 'd' &&
+	    } else if (icon != 'p' && icon != 'd' && icon != 'gr' &&
 		map[row + ro][col + co][1] != ' ' && (
 		map[row + ro][col + co][1] == '!' || 
 		(t - parseInt(map[row + ro][col + co][1], 26)
 		 + guardCycleLen) % guardCycleLen
 		    < guardCycleLen / 2)) {
 		html += 'o';
-	    } else if (row + ro == pr && col + co == pc) {
-		html += '@';
+	    }
+	    if (row + ro == pr && col + co == pc) {
+		html += '<span class="player"></span>';
 	    }
 	    html += '</td>';
 	}
@@ -311,5 +322,5 @@ function init() {
     });
     clientInit();
 
-   setInterval(tick, 100);
+    setInterval(tick, 100);
 }
