@@ -471,5 +471,7 @@ function init() {
 }
 
 function addToChat(message) {
-    document.getElementById('chat').innerHTML += message + '<br>';
+    var chat = document.getElementById('chat');
+    chat.innerHTML += message + '<br>';
+    chat.scrollTop = chat.scrollHeight;
 }
