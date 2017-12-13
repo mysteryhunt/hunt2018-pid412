@@ -412,9 +412,9 @@ function handleState(level, startTime, ninjaX, ninjaY) {
 function handleTeamStatus(level, levelStatuses) {
     var extra = '';
     if (levelStatuses[1].won) {
-	extra = '1 2 3';
+	extra = ', switch 1, switch 2, switch 3';
     } else if (levelStatuses[0].won) {
-	extra = '1 2';
+	extra = ', switch 1, switch 2';
     }
     document.getElementById('levelbit').innerHTML = extra;
 }
@@ -454,8 +454,8 @@ function init() {
 		if (msg in commands) {
 		    send = move(msg.toUpperCase());
 		}
-		if (msg >= 1 && msg <= 3) {
-		    changeLevel(parseInt(msg));
+		if (msg.startsWith('switch ')) {
+		    changeLevel(parseInt(msg.slice(7)));
 		}
 		if (send) {
 		    sendChatMessage(msg,
