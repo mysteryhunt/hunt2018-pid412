@@ -41,7 +41,11 @@ function clientInit() {
 	handleState.apply(null, eval('['+newState+']'));
     });
 
-    client.subscribe('notifications', msg => toastr.info(msg));
+    client.subscribe('notifications', msg => addToChat(msg));
+    client.subscribe('chatMessages', msg => {
+	msg = eval('('+msg+')');
+	addToChat('<b>' + msg['name'] + '</b>: ' + msg['message'])
+    });
 
     TimeSync.start(client);
 }

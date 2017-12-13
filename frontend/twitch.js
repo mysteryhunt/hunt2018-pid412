@@ -469,3 +469,7 @@ function init() {
 
     setInterval(tick, 100);
 }
+
+function addToChat(message) {
+    document.getElementById('chat').innerHTML += message + '<br>';
+}
