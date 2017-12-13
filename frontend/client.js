@@ -53,12 +53,12 @@ function getTime() {
 function move(direction) {
     if (status === 'submitting') {
         toastr.error('Move already in progress');
-        return;
+        return false;
     }
 
     if (status === 'wait') {
         toastr.error('You may only move once every 4 seconds');
-        return;
+        return false;
     }
 
     var endpoint = rateLimitEnabled ? '/move' : '/moveUnlimited';
@@ -72,7 +72,8 @@ function move(direction) {
         .then(() => changeStatus('wait'))
         .then(() => wait(rateLimit))
         .catch((e) => toastr.error(e.message))
-        .then(() => changeStatus('ready'))
+        .then(() => changeStatus('ready'));
+    return true;
 }
 
 function toggleRateLimiting() {
@@ -98,4 +99,15 @@ function changeLevel(level) {
     client.post('/changeLevel', { level })
         .catch((e) => toastr.error(e.message))
         .then(() => changeStatus('ready'));
+}
+
+function sendChatMessage(message, name) {
+    client.post('/sendChatMessage', { message: message, name: name })
+        .catch((e) => toastr.error(e.message));
+}
+
+function updateTeamStatus() {
+    client.get('/teamStatus')
+	.then(r => handleTeamStatus(r['level'], r['levelStatuses']))
+	.catch(e => console.error('/teamStatus failed', e));
 }

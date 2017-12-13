@@ -398,10 +398,25 @@ function plot(level, map, time, startTime, pr, pc, rest) {
 
 var time = 0;
 var state;
+var lastLevel = -1;
 function handleState(level, startTime, ninjaX, ninjaY) {
     var rest = Array.prototype.slice.call(arguments, 4);
     state = [level, startTime, ninjaX, ninjaY, rest];
     tick();
+    if (lastLevel != level) {
+	lastLevel = level;
+	updateTeamStatus();
+    }
+}
+
+function handleTeamStatus(level, levelStatuses) {
+    var extra = '';
+    if (levelStatuses[1].won) {
+	extra = '1 2 3';
+    } else if (levelStatuses[0].won) {
+	extra = '1 2';
+    }
+    document.getElementById('levelbit').innerHTML = extra;
 }
 
 function tick() {
@@ -419,25 +434,37 @@ function tick() {
     }
 }
 
+var commands = {
+    'n': true,
+    's': true,
+    'e': true,
+    'w': true,
+    'ne': true,
+    'se': true,
+    'nw': true,
+    'sw': true,
+};
+
 function init() {
-    document.addEventListener("keydown", function (event) {
-	if (event.key == 'ArrowUp' || event.key == 'w' || event.key == '8') {
-	    move('N')
-	}
-	if (event.key == 'ArrowDown' || event.key == 'x' || event.key == '2') {
-	    move('S')
-	}
-	if (event.key == 'ArrowLeft' || event.key == 'a' || event.key == '4') {
-	    move('W')
-	}
-	if (event.key == 'ArrowRight' || event.key == 'd' || event.key == '6') {
-	    move('E')
-	}
-	if (event.key == 'q' || event.key == '7') move('NW');
-	if (event.key == 'e' || event.key == '9') move('NE');
-	if (event.key == 'z' || event.key == '1') move('SW');
-	if (event.key == 'c' || event.key == '3') move('SE');
-    });
+    document.getElementById('entry').addEventListener(
+	"keydown", function(event) {
+	    if (event.key == 'Enter') {
+		var msg = document.getElementById('entry').value;
+		var send = true;
+		if (msg in commands) {
+		    send = move(msg.toUpperCase());
+		}
+		if (msg >= 1 && msg <= 3) {
+		    changeLevel(parseInt(msg));
+		}
+		if (send) {
+		    sendChatMessage(msg,
+				    document.getElementById('username').value);
+		}
+		document.getElementById('entry').value = '';
+	    }
+	});
+    
     clientInit();
 
     setInterval(tick, 100);

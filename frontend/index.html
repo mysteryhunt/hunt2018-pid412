@@ -21,18 +21,27 @@
     <script type="text/javascript" src="timesync.js"></script>
   </head>
   <body onload="init()">
-    <h1>TPMH</h1>
+    <h1>Twitch Plays Mystery Hunt</h1>
 
+    <div id="main">
     <table id="grid">
     </table>
 
+    <div id="controls">
+    <p><label>Chat Name: <input id="username" type="text" value="someone" /></label></p>
+    <div id="chatbox">
+      <center>Chat</center>
+      <div id="chat"></div>
+      <div>&gt; <input id="entry" type="text" /></div>
+    </div>
+    <p>Commands: n s e w ne se nw sw <span id="levelbit"></span></p>
+    
     <p id="status">Status: <span id="status-text">ready</span></p>
 
-    <p>Level: <a href="javascript:changeLevel(1)">1</a> <a href="javascript:changeLevel(2)">2</a> <a href="javascript:changeLevel(3)">3</a></p>
     <p>Rate-limited: <span id="rate-limit-indicator">true</span> <button onClick="toggleRateLimiting()">Toggle</button></p>
     <p>Delayed: <span id="delay-indicator">true</span> <button onClick="toggleDelay()">Toggle</button></p>
     </div>
-
+    </div>
   </body>
 
 </html>
