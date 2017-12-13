@@ -128,6 +128,20 @@ HuntJS.onSubscribe('gameState', ({ team }) => {
   simPostCommand(`/${team.id()}/refreshGameState`);
 });
 
+HuntJS.post('/sendChatMessage', ({ data, team }) => {
+  if (!data || !data.message || (typeof data.message !== 'string') || !data.name || (typeof data.name !== 'string')) {
+    throw HuntJS.Error(422, 'Must provide non-empty strings for message and name parameters');
+  }
+
+  team.publish('chatMessages', JSON.stringify({
+    message: data.message,
+    name: data.name,
+  }));
+}, {
+  // team-wide rate limit to limit load on Redis
+  rateLimitPerMinute: 300,
+});
+
 // For testing, clients can hit startFakeEmitters to send some garbage to the
 // pubsub channels
 const fakeEmittersStartedForTeamIds = new Set();
