@@ -21,6 +21,7 @@ type levelState interface {
 	CurrentChunk() int8
 	Serialize() string
 	IsWon() bool
+	ArtifactName() string
 }
 
 type teamData struct {
@@ -49,14 +50,15 @@ func (team *teamData) getLevelStatus() *levelStatus {
 // Call this before working with teams[teamID]. Initializes values from Redis,
 // MySQL, or default starting state if the team isn't in the map. Marks the
 // team as active so it won't get evicted for the next 5 minuts.
-func (teams teamMap) touch(teamID string) (bool, error) {
+func (teams teamMap) touch(teamID string, redis *redisConnection) (bool, error) {
 	if teams[teamID] != nil {
 		teams[teamID].lastHeartbeat = time.Now()
 		return false, nil
 	}
 
-	// TODO: hydrate from Redis or MySQL
-	teams[teamID] = &teamData{
+	// Create a default state
+	// TODO: load this from MySQL
+	data := teamData{
 		currentLevel:  1,
 		lastHeartbeat: time.Now(),
 		levels: [3]*levelStatus{
@@ -78,6 +80,47 @@ func (teams teamMap) touch(teamID string) (bool, error) {
 		},
 	}
 
+	// Try to load state from Redis
+	stateStr, noState, err := redis.loadState(teamID)
+	if err != nil {
+		return false, err
+	}
+
+	if !noState {
+		// we got the state from redis, deserialize it
+		if string(stateStr[0]) == "1" {
+			state, err := level1.DeserializeState(stateStr)
+
+			if err != nil {
+				return false, fmt.Errorf("Error deserializing level 1 state (%s): %s", stateStr, err)
+			}
+
+			data.levels[0].state = state
+		} else if string(stateStr[0]) == "2" {
+			state, err := level2.DeserializeState(stateStr)
+
+			if err != nil {
+				return false, fmt.Errorf("Error deserializing level 2 state (%s): %s", stateStr, err)
+			}
+
+			data.levels[1].state = state
+
+			// We won't need this once we're loading state from mysql
+			data.currentLevel = 2
+		} else if string(stateStr[0]) == "3" {
+			state, err := level3.DeserializeState(stateStr)
+
+			if err != nil {
+				return false, fmt.Errorf("Error deserializing level 3 state (%s): %s", stateStr, err)
+			}
+
+			data.levels[2].state = state
+		} else {
+			return false, fmt.Errorf("Got Redis state but could not determine which level it's for: %s", stateStr)
+		}
+	}
+
+	teams[teamID] = &data
 	return true, nil
 }
 

@@ -65,6 +65,24 @@ func (state *State) Serialize() string {
 	return fmt.Sprintf("1,%d,%d,%d", tpmhutils.UnixMillis(state.startTime), state.ninjaX, state.ninjaY)
 }
 
+func DeserializeState(stateStr string) (*State, error) {
+	state := DefaultState()
+	var startTimeMillis int64
+
+	_, err := fmt.Sscanf(stateStr, "1,%d,%d,%d", &startTimeMillis, &state.ninjaX, &state.ninjaY)
+	if err != nil {
+		return nil, err
+	}
+
+	state.startTime = tpmhutils.TimeFromMillis(startTimeMillis)
+
+	return state, nil
+}
+
 func (state *State) IsWon() bool {
 	return (state.ninjaX == 28) && (state.ninjaY == 1)
+}
+
+func (state *State) ArtifactName() string {
+	return "Great Gi"
 }

@@ -28,7 +28,7 @@ function simPostCommand(path) {
 function simGetValue(path) {
   return new Promise((resolve, reject) => {
     request.get(`${process.env.SIMULATION_SERVICE_ADDRESS}${path}`, (error, httpResponse, body) => {
-      const code = httpResponse.statusCode;
+      const code = httpResponse && httpResponse.statusCode;
 
       if (error) {
         reject(error);
@@ -90,7 +90,8 @@ HuntJS.get('/levelData', ({ data }) => {
     throw HuntJS.Error(422, 'No level given');
   }
 
-  if (data.level !== 1) {
+  // this check should read from mysql
+  if (!((data.level === 1) || (data.level === 2))) {
     throw HuntJS.Error(422, 'You haven\'t unlocked that level');
   }
 
@@ -115,7 +116,7 @@ HuntJS.post('/changeLevel', async ({ data, team }) => {
     throw HuntJS.Error(422, 'No level given');
   }
 
-  if (data.level !== 1) {
+  if (!((data.level === 1) || (data.level === 2))) {
     throw HuntJS.Error(422, 'You haven\'t unlocked that level');
   }
 

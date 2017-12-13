@@ -84,7 +84,16 @@ func (state *State) Serialize() string {
 	return fmt.Sprintf("3,%d,%d,%d", tpmhutils.UnixMillis(state.startTime), state.ninjaX, state.ninjaY)
 }
 
+func DeserializeState(stateStr string) (*State, error) {
+	state := DefaultState()
+	return state, nil
+}
+
 func (state *State) IsWon() bool {
 	// TODO: implmement
 	return false
+}
+
+func (state *State) ArtifactName() string {
+	return "Terrific Tabi"
 }

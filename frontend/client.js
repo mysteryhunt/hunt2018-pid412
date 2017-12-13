@@ -71,8 +71,8 @@ function move(direction) {
         .then(() => client.post(endpoint, { direction: direction }))
         .then(() => changeStatus('wait'))
         .then(() => wait(rateLimit))
-        .then(() => changeStatus('ready'))
         .catch((e) => toastr.error(e.message))
+        .then(() => changeStatus('ready'))
 }
 
 function toggleRateLimiting() {
@@ -91,4 +91,11 @@ function toggleDelay() {
 function delayEnabled() {
     delayEnabled = !delayEnabled;
     document.getElementById('delay-indicator').innerText = String(delayEnabled)
+}
+
+function changeLevel(level) {
+    changeStatus('submitting');
+    client.post('/changeLevel', { level })
+        .catch((e) => toastr.error(e.message))
+        .then(() => changeStatus('ready'));
 }

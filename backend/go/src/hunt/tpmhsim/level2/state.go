@@ -1,6 +1,7 @@
 package level2
 
 import (
+	"bytes"
 	"fmt"
 	"hunt/tpmhsim/tpmhutils"
 	"time"
@@ -30,15 +31,62 @@ func (state *State) MoveNinja(deltaX int8, deltaY int8) bool {
 	x := state.ninjaX + deltaX
 	y := state.ninjaY + deltaY
 
-	// TODO: check if x, y is valid
-	state.ninjaX = x
-	state.ninjaY = y
+	if validMoves[y][x] {
+		state.ninjaX = x
+		state.ninjaY = y
+		return true
+	}
 
-	return true
+	return false
+}
+
+func (state *State) resetLevel() {
+	state.ninjaX = spawnX
+	state.ninjaY = spawnY
+	state.dartLaunchTimes = [24]*time.Time{}
 }
 
 func (state *State) RunFrame() (bool, []string) {
-	// TODO: actuall simulate
+	x := state.ninjaX
+	y := state.ninjaY
+	now := time.Now()
+
+	// Check lava
+	if lavaMap[y][x] {
+		state.resetLevel()
+		return true, []string{"You fell into lava!"}
+	}
+
+	// Launch darts
+	activatedLauncher := pressurePlates[y][x]
+	if (activatedLauncher != -1) && (state.dartLaunchTimes[activatedLauncher] == nil) {
+		state.dartLaunchTimes[activatedLauncher] = &now
+	}
+
+	// Check darts
+	for i, launchTime := range state.dartLaunchTimes {
+		if launchTime == nil {
+			continue
+		}
+
+		dartX, dartY := dartPosition(i, now.Sub(*launchTime))
+		if (dartX >= 30) || (dartX < 0) || (dartY >= 30) || (dartY < 0) || !validMoves[dartY][dartX] {
+			state.dartLaunchTimes[i] = nil
+		}
+
+		if (dartX == state.ninjaX) && (dartY == state.ninjaY) {
+			state.resetLevel()
+			return true, []string{"You were hit by a dart!"}
+		}
+	}
+
+	// Check guards
+	t := int(now.Sub(state.startTime).Seconds())
+	if squareIsGuarded(state.ninjaX, state.ninjaY, t) {
+		state.resetLevel()
+		return true, []string{"You were spotted by a guard!"}
+	}
+
 	return false, nil
 }
 
@@ -48,11 +96,63 @@ func (state *State) CurrentChunk() int8 {
 }
 
 func (state *State) Serialize() string {
-	// TODO: implement
-	return fmt.Sprintf("2,%d,%d,%d", tpmhutils.UnixMillis(state.startTime), state.ninjaX, state.ninjaY)
+	var buffer bytes.Buffer
+
+	buffer.WriteString(fmt.Sprintf("2,%d,%d,%d",
+		tpmhutils.UnixMillis(state.startTime), state.ninjaX, state.ninjaY))
+
+	for _, launchTime := range state.dartLaunchTimes {
+		buffer.WriteString(",")
+
+		if launchTime == nil {
+			buffer.WriteString("-1")
+		} else {
+			timeStr := fmt.Sprintf("%d", tpmhutils.UnixMillis(*launchTime))
+			fmt.Printf(timeStr)
+			buffer.WriteString(timeStr)
+		}
+	}
+
+	return buffer.String()
+}
+
+func DeserializeState(stateStr string) (*State, error) {
+	state := DefaultState()
+	var startTimeMillis int64
+	var launchTimeMillis [24]int64
+
+	_, err := fmt.Sscanf(
+		stateStr,
+		"2,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
+		&startTimeMillis, &state.ninjaX, &state.ninjaY,
+		&launchTimeMillis[0], &launchTimeMillis[1], &launchTimeMillis[2], &launchTimeMillis[3],
+		&launchTimeMillis[4], &launchTimeMillis[5], &launchTimeMillis[6], &launchTimeMillis[7],
+		&launchTimeMillis[8], &launchTimeMillis[9], &launchTimeMillis[10], &launchTimeMillis[11],
+		&launchTimeMillis[12], &launchTimeMillis[13], &launchTimeMillis[14], &launchTimeMillis[15],
+		&launchTimeMillis[16], &launchTimeMillis[17], &launchTimeMillis[18], &launchTimeMillis[19],
+		&launchTimeMillis[20], &launchTimeMillis[21], &launchTimeMillis[22], &launchTimeMillis[23],
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	state.startTime = tpmhutils.TimeFromMillis(startTimeMillis)
+
+	for i, millis := range launchTimeMillis {
+		if millis >= 0 {
+			t := tpmhutils.TimeFromMillis(millis)
+			state.dartLaunchTimes[i] = &t
+		}
+	}
+
+	return state, nil
 }
 
 func (state *State) IsWon() bool {
-	// TODO: implmement
-	return false
+	return (state.ninjaX == 28) && (state.ninjaY == 8)
+}
+
+func (state *State) ArtifactName() string {
+	return "Majestic Mask"
 }

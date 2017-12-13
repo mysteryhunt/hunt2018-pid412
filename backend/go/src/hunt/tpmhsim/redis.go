@@ -39,10 +39,44 @@ func (conn *redisConnection) buildRedisKey(teamID string, key string) string {
 }
 
 func (conn *redisConnection) flushRedis(teamID string, levelStateStr string) {
-	conn.client.Set(conn.buildRedisKey(teamID, "gameState"), levelStateStr, 0)
-	conn.client.Publish(conn.buildRedisKey(teamID, "gameState"), levelStateStr)
+	err := conn.client.Set(conn.buildRedisKey(teamID, "gameState"), levelStateStr, 0).Err()
+	if err != nil {
+		log.Errorw("Error flushing Redis",
+			"teamID", teamID,
+			"stateStr", levelStateStr,
+			"error", err)
+	}
+
+	err = conn.client.Publish(conn.buildRedisKey(teamID, "gameState"), levelStateStr).Err()
+	if err != nil {
+		log.Errorw("Error publishing game state update to Redis",
+			"teamID", teamID,
+			"stateStr", levelStateStr,
+			"error", err)
+	}
 }
 
 func (conn *redisConnection) publishMessage(teamID string, message string) {
-	conn.client.Publish(conn.buildRedisKey(teamID, "notifications"), message)
+	err := conn.client.Publish(conn.buildRedisKey(teamID, "notifications"), message).Err()
+	if err != nil {
+		log.Errorw("Error publishing notification to Redis",
+			"teamID", teamID,
+			"message", message,
+			"error", err)
+	}
+}
+
+// return (state, isNil, error)
+func (conn *redisConnection) loadState(teamID string) (string, bool, error) {
+	state, err := conn.client.Get(conn.buildRedisKey(teamID, "gameState")).Result()
+
+	if err == redis.Nil {
+		return "", true, nil
+	}
+
+	if err != nil {
+		return "", false, err
+	}
+
+	return state, false, nil
 }

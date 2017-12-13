@@ -50,6 +50,9 @@ func main() {
 	app := gin.New()
 	app.Use(gin.Recovery())
 	app.GET("/healthz", healthzRoute)
+	app.GET("/currentTime", func(c *gin.Context) {
+		c.String(http.StatusOK, "%d", tpmhutils.UnixMillis(time.Now()))
+	})
 
 	endpoints := app.Group("/")
 	endpoints.Use(ginzap.Ginzap(rawlog, time.RFC3339, true))
@@ -77,10 +80,6 @@ func main() {
 
 	endpoints.POST("/:teamID/refreshGameState", func(c *gin.Context) {
 		refreshGameStateChannel <- c.Param("teamID")
-	})
-
-	endpoints.GET("/currentTime", func(c *gin.Context) {
-		c.String(http.StatusOK, "%d", tpmhutils.UnixMillis(time.Now()))
 	})
 
 	endpoints.POST("/:teamID/changeLevel/:level", func(c *gin.Context) {

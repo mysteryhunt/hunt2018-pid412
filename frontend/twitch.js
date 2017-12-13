@@ -4,19 +4,19 @@ maps[1] = [['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  '],
 	   ['w  ','f  ','f  ','f  ','l 0','l 2','l 4','l 6','l 0','l  ',
 	    'l  ','l  ','l  ','l  ','l  ','l  ','f  ','fB ','f  ','f  ',
-	    'f  ','f  ','l 3','l 3','l  ','l  ','f  ','f  ','x  ','w  '],
+	    'f  ','f  ','l 3','l03','l  ','l  ','f  ','f  ','x  ','w  '],
 	   ['w  ','f  ','f  ','f  ','l  ','l  ','l  ','l  ','l 2','l 4',
 	    'l 6','l 0','l 2','l  ','l  ','l  ','f  ','fB ','fB ','fB ',
-	    'f  ','f  ','l  ','l 6','l 7','l  ','f  ','f  ','f  ','w  '],
+	    'f  ','f0 ','l0 ','l06','l 7','l  ','f  ','f  ','f  ','w  '],
 	   ['w  ','f  ','f  ','f  ','l  ','l  ','l  ','l  ','l  ','l  ',
 	    'l  ','l  ','l 4','l 6','l 0','l 2','l 4','fB ','fB ','fB ',
-	    'g0 ','f  ','l  ','l  ','l  ','l 5','f  ','f  ','f  ','w  '],
+	    'g0 ','f0 ','l0 ','l0 ','l  ','l 5','f  ','f  ','f  ','w  '],
 	   ['w  ','f  ','f  ','f  ','l  ','l  ','l  ','l  ','l 2','l 4',
 	    'l 6','l 0','l 2','l  ','l  ','l  ','l  ','fB ','fB ','fB ',
-	    'f  ','f  ','l 3','l 3','l  ','l  ','f  ','f  ','f  ','w  '],
+	    'f  ','f0 ','l03','l03','l  ','l  ','f  ','f  ','f  ','w  '],
 	   ['w  ','f  ','f  ','f  ','l 0','l 2','l 4','l 6','l 0','l  ',
 	    'l  ','l  ','l  ','l  ','l  ','l  ','l  ','fB ','f  ','f  ',
-	    'f  ','f  ','l  ','l 6','l 7','l  ','f  ','f  ','f  ','w  '],
+	    'f  ','f  ','l  ','l06','l 7','l  ','f  ','f  ','f  ','w  '],
 	   ['w  ','fB ','f  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','l  ','l  ','l  ','l  ','l  ','l  ',
 	    'f  ','f  ','l  ','l  ','l 2','l 5','f  ','f  ','f  ','w  '],
@@ -142,13 +142,13 @@ maps[2] = [['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','l  ','l  ','f  ','f  ','f  ','f  ','f  ','l  ','w  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
-	    'w  ','l  ','f  ','f  ','f  ','f  ','f  ','l  ','l  ','w  ',
+	    'w  ','l  ','l  ','f  ','f  ','f  ','f  ','l  ','l  ','w  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
-	    'de0','f  ','p 0','f  ','f  ','f  ','l  ','l  ','l  ','w  ',
+	    'de0','f  ','f  ','p 0','f  ','f  ','l  ','l  ','l  ','w  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
-	    'w  ','f  ','f  ','l  ','l  ','l  ','l  ','l  ','l  ','w  ',
+	    'w  ','f  ','f  ','f  ','l  ','l  ','l  ','l  ','l  ','w  ',
 	    'v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  '],
 	   ['v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ','v  ',
 	    'w  ','f  ','f  ','f  ','fB ','f  ','f  ','f  ','f  ','w  ',
@@ -272,7 +272,7 @@ maps[3] = [['w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ',
 	    'w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  ','w  '],
 	  ];
-	   
+
 var platCycleLen =  8;
 var guardCycleLen = 22;
 
@@ -368,7 +368,7 @@ function plot(level, map, time, startTime, pr, pc, rest) {
 		icon += map[row + ro][col + co][1];
 	    }
 	    html += '<td class="' + icon + '">';
-	    
+
 	    if (row + ro == pr && col + co == pc) {
 		html += '<span class="player"></span>';
 	    }
@@ -382,7 +382,7 @@ function plot(level, map, time, startTime, pr, pc, rest) {
 	    }
 	    if (icon != 'p' && icon[0] != 'd' && icon[0] != 'g' &&
 		map[row + ro][col + co][1] != ' ' && (
-		map[row + ro][col + co][1] == '!' || 
+		map[row + ro][col + co][1] == '!' ||
 		(t - parseInt(map[row + ro][col + co][1], 26)
 		 + guardCycleLen) % guardCycleLen
 		    < guardCycleLen / 2)) {
@@ -411,7 +411,7 @@ function tick() {
 	ninjaX = state[2];
 	ninjaY = state[3];
 	rest = state[4];
-	
+
 	plot(level, maps[level], getTime() / 1000,
 	     startTime / 1000,
 	     ninjaY, ninjaX,

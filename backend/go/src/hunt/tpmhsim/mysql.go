@@ -43,5 +43,5 @@ func newMysqlConnection(host string,
 }
 
 func (conn *mysqlConnection) flushMysql(teamID string, data *mysqlTeamData) {
-
+	// TODO
 }

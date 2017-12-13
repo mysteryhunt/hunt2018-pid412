@@ -54,10 +54,10 @@ func startSimulator(
 		mysqlNeedsFlush := make(teamSet)
 
 		// Process commands from the channels
-		simulatorProcessMoves(moveChannel, teams, redisNeedsFlush)
-		simulatorProcessHeartbeats(heartbeatChannel, teams, redisNeedsFlush)
+		simulatorProcessMoves(moveChannel, teams, redisNeedsFlush, redis)
+		simulatorProcessHeartbeats(heartbeatChannel, teams, redisNeedsFlush, redis)
 		simulatorProcessRefreshRequests(refreshGameStateChannel, redisNeedsFlush)
-		simulatorProcessLevelChanges(changeLevelChannel, teams, redisNeedsFlush, mysqlNeedsFlush)
+		simulatorProcessLevelChanges(changeLevelChannel, teams, redisNeedsFlush, redis, mysqlNeedsFlush)
 
 		// Simulate a frame
 		// If there were changes:
@@ -75,6 +75,7 @@ func startSimulator(
 				redisNeedsFlush[teamID] = true
 
 				if !teamLevelStatus.won && teamLevelState.IsWon() {
+					go redis.publishMessage(teamID, fmt.Sprintf("You have found the %s", teamLevelState.ArtifactName()))
 					teamLevelStatus.won = true
 					mysqlNeedsFlush[teamID] = true
 				}
@@ -177,13 +178,13 @@ func startSimulator(
 }
 
 // Channel processors
-func simulatorProcessMoves(moveChannel chan *moveCommand, teams teamMap, redisNeedsFlush teamSet) {
+func simulatorProcessMoves(moveChannel chan *moveCommand, teams teamMap, redisNeedsFlush teamSet, redis *redisConnection) {
 	for i := 0; i < config.MaxBufferLength; i++ {
 		select {
 		case moveCmd := <-moveChannel:
 			teamID := moveCmd.teamID
 
-			didLoad, err := teams.touch(teamID)
+			didLoad, err := teams.touch(teamID, redis)
 			if err != nil {
 				log.Errorw("Encountered an error touching team state while processing move command",
 					"error", err,
@@ -213,11 +214,11 @@ func simulatorProcessMoves(moveChannel chan *moveCommand, teams teamMap, redisNe
 	}
 }
 
-func simulatorProcessHeartbeats(heartbeatChannel chan string, teams teamMap, redisNeedsFlush teamSet) {
+func simulatorProcessHeartbeats(heartbeatChannel chan string, teams teamMap, redisNeedsFlush teamSet, redis *redisConnection) {
 	for i := 0; i < config.MaxBufferLength; i++ {
 		select {
 		case teamID := <-heartbeatChannel:
-			didLoad, err := teams.touch(teamID)
+			didLoad, err := teams.touch(teamID, redis)
 			if err != nil {
 				log.Errorw("Encountered an error touching team state while processing heartbeat command",
 					"error", err,
@@ -248,6 +249,7 @@ func simulatorProcessLevelChanges(
 	changeLevelChannel chan *changeLevelCommand,
 	teams teamMap,
 	redisNeedsFlush teamSet,
+	redis *redisConnection,
 	mysqlNeedsFlush teamSet,
 ) {
 	for i := 0; i < config.MaxBufferLength; i++ {
@@ -256,7 +258,7 @@ func simulatorProcessLevelChanges(
 			teamID := changeLevelCommand.teamID
 			newLevel := changeLevelCommand.newLevel
 
-			_, err := teams.touch(teamID)
+			_, err := teams.touch(teamID, redis)
 			if err != nil {
 				log.Errorw("Encountered an error touching team state while processing changeLevel command",
 					"error", err,
@@ -265,7 +267,7 @@ func simulatorProcessLevelChanges(
 			}
 
 			team := teams[teamID]
-			if team != nil {
+			if team == nil {
 				log.Errorw("Team was nil while processing changeLevel command",
 					"teamID", teamID)
 				continue
@@ -284,11 +286,12 @@ func simulatorProcessLevelChanges(
 					"level", newLevel)
 			}
 
-			if (newLevel > 1) && (!team.levels[newLevel-2].won) {
-				log.Errorw("changeLevel command issued for a level that was not unlocked",
-					"teamID", teamID,
-					"level", newLevel)
-			}
+			// TODO: bring back this check
+			// if (newLevel > 1) && (!team.levels[newLevel-2].won) {
+			// 	log.Errorw("changeLevel command issued for a level that was not unlocked",
+			// 		"teamID", teamID,
+			// 		"level", newLevel)
+			// }
 
 			team.currentLevel = newLevel
 			team.resetLevelStates()
