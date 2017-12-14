@@ -3,8 +3,8 @@
 .t { background-image: url(img/t.png), url(img/l.png) }
 .l { background-image: url(img/l.png) }
 .x1 { background-image: url(img/x1.png), url(img/f.png) }
-.x2 { background-color: purple; }
-.x3 { background-color: purple; }
+.x2 { background-image: url(img/x2.png), url(img/f.png) }
+.x3 { background-image: url(img/x3.png), url(img/f.png) }
 .v { background-color: black; }
 .g { background-image: url(img/gl.png), url(img/f.png) }
 .gr { background-image: url(img/gr.png), url(img/f.png) }

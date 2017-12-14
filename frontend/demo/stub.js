@@ -75,3 +75,7 @@ function changeLevel(num) {
     ninjaY = ymap[num];
     update();
 }
+
+function updateTeamStatus() {
+
+}
