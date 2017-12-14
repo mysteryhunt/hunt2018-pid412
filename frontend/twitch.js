@@ -457,6 +457,9 @@ function init() {
 		if (msg.startsWith('switch ')) {
 		    changeLevel(parseInt(msg.slice(7)));
 		}
+		if (msg == 'restart level') {
+		    changeLevel(lastLevel);
+		}
 		if (send) {
 		    sendChatMessage(msg,
 				    document.getElementById('username').value);
