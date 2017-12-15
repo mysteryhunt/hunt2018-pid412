@@ -40,9 +40,8 @@ func (state *State) MoveNinja(deltaX int8, deltaY int8) bool {
 	return false
 }
 
-func (state *State) resetLevel() {
-	state.ninjaX = spawnX
-	state.ninjaY = spawnY
+func (state *State) killNinja() {
+	state.ninjaX, state.ninjaY = spawnPointFor(state.ninjaX, state.ninjaY)
 	state.dartLaunchTimes = [24]*time.Time{}
 }
 
@@ -53,7 +52,7 @@ func (state *State) RunFrame() (bool, []string) {
 
 	// Check lava
 	if lavaMap[y][x] {
-		state.resetLevel()
+		state.killNinja()
 		return true, []string{"You fell into lava!"}
 	}
 
@@ -75,7 +74,7 @@ func (state *State) RunFrame() (bool, []string) {
 		}
 
 		if (dartX == state.ninjaX) && (dartY == state.ninjaY) {
-			state.resetLevel()
+			state.killNinja()
 			return true, []string{"You were hit by a dart!"}
 		}
 	}
@@ -83,7 +82,7 @@ func (state *State) RunFrame() (bool, []string) {
 	// Check guards
 	t := int(now.Sub(state.startTime).Seconds())
 	if squareIsGuarded(state.ninjaX, state.ninjaY, t) {
-		state.resetLevel()
+		state.killNinja()
 		return true, []string{"You were spotted by a guard!"}
 	}
 
@@ -108,7 +107,6 @@ func (state *State) Serialize() string {
 			buffer.WriteString("-1")
 		} else {
 			timeStr := fmt.Sprintf("%d", tpmhutils.UnixMillis(*launchTime))
-			fmt.Printf(timeStr)
 			buffer.WriteString(timeStr)
 		}
 	}

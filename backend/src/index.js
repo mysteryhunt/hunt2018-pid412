@@ -91,9 +91,9 @@ HuntJS.get('/levelData', ({ data }) => {
   }
 
   // this check should read from mysql
-  if (!((data.level === 1) || (data.level === 2))) {
-    throw HuntJS.Error(422, 'You haven\'t unlocked that level');
-  }
+  // if (!((data.level === 1) || (data.level === 2))) {
+  //   throw HuntJS.Error(422, 'You haven\'t unlocked that level');
+  // }
 
   // TODO: actual level data
   return ['fake level data 1', 'fake level data 2'];
@@ -116,9 +116,9 @@ HuntJS.post('/changeLevel', async ({ data, team }) => {
     throw HuntJS.Error(422, 'No level given');
   }
 
-  if (!((data.level === 1) || (data.level === 2))) {
-    throw HuntJS.Error(422, 'You haven\'t unlocked that level');
-  }
+  // if (!((data.level === 1) || (data.level === 2))) {
+  //   throw HuntJS.Error(422, 'You haven\'t unlocked that level');
+  // }
 
   await simPostCommand(`/${team.id()}/changeLevel/${data.level}`);
   return 'fake level data';

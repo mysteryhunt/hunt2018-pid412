@@ -65,7 +65,7 @@ func main() {
 	go startSimulator(moveChannel, heartbeatChannel, refreshGameStateChannel, changeLevelChannel)
 
 	endpoints.POST("/:teamID/move/:dir", func(c *gin.Context) {
-		dir, err := parseDirection(c.Param("dir"))
+		dir, err := tpmhutils.ParseDirection(c.Param("dir"))
 		if err != nil {
 			c.String(http.StatusUnprocessableEntity, "Invalid direction: %s", c.Param("dir"))
 			return

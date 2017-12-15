@@ -36,20 +36,20 @@ func (state *State) MoveNinja(deltaX int8, deltaY int8) bool {
 	return false
 }
 
+func (state *State) killNinja() {
+	state.ninjaX, state.ninjaY = spawnPointFor(state.ninjaX, state.ninjaY)
+}
+
 func (state *State) RunFrame() (bool, []string) {
 	t := int(time.Now().Sub(state.startTime).Seconds())
 
 	if squareIsLava(state.ninjaX, state.ninjaY, t) {
-		state.ninjaX = spawnX
-		state.ninjaY = spawnY
-
+		state.killNinja()
 		return true, []string{"You fell into lava!"}
 	}
 
 	if squareIsGuarded(state.ninjaX, state.ninjaY, t) {
-		state.ninjaX = spawnX
-		state.ninjaY = spawnY
-
+		state.killNinja()
 		return true, []string{"You were spotted by a guard!"}
 	}
 

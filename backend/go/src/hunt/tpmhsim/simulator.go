@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"hunt/tpmhsim/tpmhutils"
 	"time"
 )
 
 // Commands from the API server
 type moveCommand struct {
 	teamID string
-	dir    direction
+	dir    tpmhutils.Direction
 }
 
 type changeLevelCommand struct {
@@ -74,12 +75,6 @@ func startSimulator(
 			if didChange {
 				redisNeedsFlush[teamID] = true
 
-				if !teamLevelStatus.won && teamLevelState.IsWon() {
-					go redis.publishMessage(teamID, fmt.Sprintf("You have found the %s", teamLevelState.ArtifactName()))
-					teamLevelStatus.won = true
-					mysqlNeedsFlush[teamID] = true
-				}
-
 				if (teamLevelState.CurrentChunk() + 2) > teamLevelStatus.unlockedChunks {
 					teamLevelStatus.unlockedChunks = (teamLevelState.CurrentChunk() + 2)
 					mysqlNeedsFlush[teamID] = true
@@ -99,6 +94,12 @@ func startSimulator(
 			if err != nil {
 				log.Errorf("Error fetching level status for team %s while flushing redis", teamID)
 				continue
+			}
+
+			if !levelStatus.won && levelStatus.state.IsWon() {
+				go redis.publishMessage(teamID, fmt.Sprintf("You have found the %s", levelStatus.state.ArtifactName()))
+				levelStatus.won = true
+				mysqlNeedsFlush[teamID] = true
 			}
 
 			go redis.flushRedis(teamID, levelStatus.state.Serialize())
@@ -204,7 +205,8 @@ func simulatorProcessMoves(moveChannel chan *moveCommand, teams teamMap, redisNe
 				continue
 			}
 
-			deltaX, deltaY := moveCmd.dir.offsets()
+			deltaX, deltaY := moveCmd.dir.Offsets()
+
 			if levelStatus.state.MoveNinja(deltaX, deltaY) {
 				redisNeedsFlush[teamID] = true
 			}
@@ -270,13 +272,6 @@ func simulatorProcessLevelChanges(
 			if team == nil {
 				log.Errorw("Team was nil while processing changeLevel command",
 					"teamID", teamID)
-				continue
-			}
-
-			if team.currentLevel == newLevel {
-				log.Warnw("changeLevel command was a no-op while processing changeLevel command",
-					"teamID", teamID,
-					"level", newLevel)
 				continue
 			}
 

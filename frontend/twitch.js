@@ -325,7 +325,7 @@ function plot(level, map, time, startTime, pr, pc, rest) {
 	    var statue;
 	    if (rest[i] < 0) {
 		statue = 'ss';
-	    } else if (rest[i] - time >= 2) {
+	    } else if (time - (rest[i] / 1000) >= 3) {
 		statue = 'sa';
 	    } else {
 		statue = 'sw';
@@ -467,7 +467,7 @@ function init() {
 		document.getElementById('entry').value = '';
 	    }
 	});
-    
+
     clientInit();
 
     setInterval(tick, 100);

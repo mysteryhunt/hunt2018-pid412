@@ -92,7 +92,10 @@ func (teams teamMap) touch(teamID string, redis *redisConnection) (bool, error) 
 			state, err := level1.DeserializeState(stateStr)
 
 			if err != nil {
-				return false, fmt.Errorf("Error deserializing level 1 state (%s): %s", stateStr, err)
+				log.Errorw("Error deserializing level 1 state",
+					"stateStr", stateStr,
+					"error", err)
+				state = level1.DefaultState()
 			}
 
 			data.levels[0].state = state
@@ -100,7 +103,10 @@ func (teams teamMap) touch(teamID string, redis *redisConnection) (bool, error) 
 			state, err := level2.DeserializeState(stateStr)
 
 			if err != nil {
-				return false, fmt.Errorf("Error deserializing level 2 state (%s): %s", stateStr, err)
+				log.Errorw("Error deserializing level 2 state",
+					"stateStr", stateStr,
+					"error", err)
+				state = level2.DefaultState()
 			}
 
 			data.levels[1].state = state
@@ -111,10 +117,16 @@ func (teams teamMap) touch(teamID string, redis *redisConnection) (bool, error) 
 			state, err := level3.DeserializeState(stateStr)
 
 			if err != nil {
-				return false, fmt.Errorf("Error deserializing level 3 state (%s): %s", stateStr, err)
+				log.Errorw("Error deserializing level 3 state",
+					"stateStr", stateStr,
+					"error", err)
+				state = level3.DefaultState()
 			}
 
 			data.levels[2].state = state
+
+			// We won't need this once we're loading state from mysql
+			data.currentLevel = 3
 		} else {
 			return false, fmt.Errorf("Got Redis state but could not determine which level it's for: %s", stateStr)
 		}
