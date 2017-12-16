@@ -70,3 +70,7 @@ table span { width: 100%; height: 100%; display: block; position: absolute;
 .testsolver-note {
     background-color: #f88;
 }
+
+#debugtools {
+    display: none;
+}

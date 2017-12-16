@@ -1,3 +1,9 @@
+/*
+TEST SOLVERS STAY OUT!!!!!
+
+This code will be minified, obfuscated, and have some other creative protections
+applied to it. Please don't read or modify this code for right now.
+*/
 var client;
 
 var rateLimitEnabled = true;
@@ -51,6 +57,10 @@ function clientInit() {
     });
 
     TimeSync.start(client);
+
+    if (document.location.search.indexOf('devmode') >= 0) {
+        document.getElementById('debugtools').style.display = 'block';
+    }
 }
 
 function getTime() {

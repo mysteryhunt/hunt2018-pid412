@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+  <!--
+  TEST SOLVERS STAY OUT!!!!!
+
+  This code will be minified, obfuscated, and have some other creative protections
+  applied to it. Please don't read or modify this code for right now.
+  -->
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -43,8 +49,16 @@
 
     <p id="status">Status: <span id="status-text">ready</span></p>
 
-    <p>Rate-limited: <span id="rate-limit-indicator">true</span> <button onClick="toggleRateLimiting()">Toggle</button></p>
-    <p>Delayed: <span id="delay-indicator">true</span> <button onClick="toggleDelay()">Toggle</button></p>
+    <div id="debugtools">
+      <!--
+      TEST SOLVERS STAY OUT!!!!!
+
+      This controls are to help with dev, they won't be available to solvers
+      -->
+      <p>Rate-limited: <span id="rate-limit-indicator">true</span> <button onClick="toggleRateLimiting()">Toggle</button></p>
+      <p>Delayed: <span id="delay-indicator">true</span> <button onClick="toggleDelay()">Toggle</button></p>
+    </div>
+
     </div>
     </div>
   </body>
