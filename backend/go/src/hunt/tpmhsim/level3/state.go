@@ -169,14 +169,14 @@ func (state *State) RunFrame() (bool, []string) {
 			statue.x = -1
 			statue.y = -1
 
-			messages = append(messages, "A statue fell into lava!")
+			messages = append(messages, "An ogre fell into lava!")
 			didChange = true
 		}
 
 		// check if the statue caught the player
 		if (statue.x == state.ninjaX) && (statue.y == state.ninjaY) {
 			state.killNinja()
-			return true, []string{"You were caught by a statue!"}
+			return true, []string{"You were caught by an ogre!"}
 		}
 	}
 

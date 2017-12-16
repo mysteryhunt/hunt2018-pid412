@@ -43,6 +43,14 @@ table span { width: 100%; height: 100%; display: block; position: absolute;
 #chatbox input {
     width: 380px;
 }
+#chatbox .info {
+    color: #00f;
+}
+#chatbox .warn {
+    color: #f00;
+}
+
+
 #controls {
     float: left;
 }
@@ -53,4 +61,8 @@ table span { width: 100%; height: 100%; display: block; position: absolute;
     overflow: hidden;
     margin: auto;
     width: 1000px;
+}
+
+.flavor {
+    font-style: italic;
 }

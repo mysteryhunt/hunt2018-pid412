@@ -41,7 +41,10 @@ function clientInit() {
 	handleState.apply(null, eval('['+newState+']'));
     });
 
-    client.subscribe('notifications', msg => addToChat(msg));
+    client.subscribe('notifications', msg => {
+        var className = msg.indexOf('You have found') > -1 ? 'info' : 'warn'
+        addToChat('<span class="' + className + '">' + msg + '</span>');
+    });
     client.subscribe('chatMessages', msg => {
 	msg = eval('('+msg+')');
 	addToChat('<b>' + msg['name'] + '</b>: ' + msg['message'])

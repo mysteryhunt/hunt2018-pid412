@@ -88,12 +88,17 @@ func startSimulator(
 			}
 
 			if teamLevelState.IsWon() {
-				go redis.publishMessage(teamID, fmt.Sprintf("You have found the %s", teamLevelState.ArtifactName()))
+				msg := fmt.Sprintf("You have found the %s!", teamLevelState.ArtifactName())
+
+				if team.currentLevel == 3 {
+					msg += " You've found all three legendary treasures! You're well on your way to challenging the Ninja Master for the Scroll of Ninja Mastery... but that's another puzzle."
+				}
+
+				go redis.publishMessage(teamID, msg)
 
 				teamLevelStatus.won = true
 				team.currentLevel = team.currentLevel + 1
 				if team.currentLevel > 3 {
-					go redis.publishMessage(teamID, fmt.Sprintf("You have acquired the legendary equipment necessary to claim the Scroll of Ninja Mastery, but before you can embark on that quest, you'll need reflect upon your journey to determine the Secret Ninja Password."))
 					team.currentLevel = 1
 				}
 

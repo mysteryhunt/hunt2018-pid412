@@ -22,6 +22,7 @@
   </head>
   <body onload="init()">
     <h1>Twitch Plays Mystery Hunt</h1>
+    <p class="flavor">So, Ninja, you seek to claim the Scroll of Ninja Mastery? Before you can challenge the Ninja Master, you must navigate his dungeons and evade his guards to obtain the three legendary treasures!</p>
 
     <div id="main">
     <table id="grid">
@@ -37,8 +38,8 @@
     <p>Commands: n, s, e, w, ne, se, nw, sw,
       restart level<span id="levelbit"></span></p>
 
-    <p>Inventory: <span id="inventory"></span></p>
-    
+    <p>Treasures: <span id="inventory"></span></p>
+
     <p id="status">Status: <span id="status-text">ready</span></p>
 
     <p>Rate-limited: <span id="rate-limit-indicator">true</span> <button onClick="toggleRateLimiting()">Toggle</button></p>
