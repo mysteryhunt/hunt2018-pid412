@@ -411,12 +411,19 @@ function handleState(level, startTime, ninjaX, ninjaY) {
 
 function handleTeamStatus(level, levelStatuses) {
     var extra = '';
+    if (levelStatuses[2].won) {
+	inventory = ', ' + levelStatuses[2].artifact;
+    }
     if (levelStatuses[1].won) {
 	extra = ', switch 1, switch 2, switch 3';
+	inventory = levelStatuses[0].artifact + ', '
+	    + levelStatuses[1].artifact + inventory;
     } else if (levelStatuses[0].won) {
 	extra = ', switch 1, switch 2';
+	inventory = levelStatuses[0].artifact + inventory;
     }
     document.getElementById('levelbit').innerHTML = extra;
+    document.getElementById('inventory').innerHTML = inventory;
 }
 
 function tick() {
