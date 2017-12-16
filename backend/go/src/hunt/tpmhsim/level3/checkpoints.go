@@ -2,9 +2,9 @@ package level3
 
 var spawnPoints = [4][2]int8{
 	{1, 24},
-	{25, 23},
+	{28, 23},
 	{18, 17},
-	{4, 5},
+	{4, 6},
 }
 
 var checkpoints = [30][30]int8{
