@@ -52,14 +52,12 @@ TimeSync = (function() {
         var rtt = endTime - startTime;
         var offset = (startTime + rtt/2) - serverTime;
 
-        addSample({ rtt, offset })
-      })
-      .catch((err) => console.error('/currentTime error', err))
-      .then(() => {
+        addSample({ rtt, offset });
+
         if (samples.length < 10) {
           setTimeout(takeSample, 200);
         }
-      });
+      })
   }
 
   return {
