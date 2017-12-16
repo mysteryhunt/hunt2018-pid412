@@ -411,6 +411,7 @@ function handleState(level, startTime, ninjaX, ninjaY) {
 
 function handleTeamStatus(level, levelStatuses) {
     var extra = '';
+    var inventory = '';
     if (levelStatuses[2].won) {
 	inventory = ', ' + levelStatuses[2].artifact;
     }
@@ -421,6 +422,8 @@ function handleTeamStatus(level, levelStatuses) {
     } else if (levelStatuses[0].won) {
 	extra = ', switch 1, switch 2';
 	inventory = levelStatuses[0].artifact + inventory;
+    } else {
+	inventory = 'nothing';
     }
     document.getElementById('levelbit').innerHTML = extra;
     document.getElementById('inventory').innerHTML = inventory;
