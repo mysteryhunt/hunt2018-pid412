@@ -55,10 +55,10 @@ func startSimulator(
 		mysqlNeedsFlush := make(teamSet)
 
 		// Process commands from the channels
-		simulatorProcessMoves(moveChannel, teams, redisNeedsFlush, redis)
-		simulatorProcessHeartbeats(heartbeatChannel, teams, redisNeedsFlush, redis)
+		simulatorProcessMoves(moveChannel, teams, redisNeedsFlush, redis, mysql)
+		simulatorProcessHeartbeats(heartbeatChannel, teams, redisNeedsFlush, redis, mysql)
 		simulatorProcessRefreshRequests(refreshGameStateChannel, redisNeedsFlush)
-		simulatorProcessLevelChanges(changeLevelChannel, teams, redisNeedsFlush, redis, mysqlNeedsFlush)
+		simulatorProcessLevelChanges(changeLevelChannel, teams, redisNeedsFlush, redis, mysqlNeedsFlush, mysql)
 
 		// Simulate a frame
 		// If there were changes:
@@ -86,6 +86,22 @@ func startSimulator(
 					go redis.publishMessage(teamID, message)
 				}
 			}
+
+			if teamLevelState.IsWon() {
+				go redis.publishMessage(teamID, fmt.Sprintf("You have found the %s", teamLevelState.ArtifactName()))
+
+				teamLevelStatus.won = true
+				team.currentLevel = team.currentLevel + 1
+				if team.currentLevel > 3 {
+					go redis.publishMessage(teamID, fmt.Sprintf("You have acquired the legendary equipment necessary to claim the Scroll of Ninja Mastery, but before you can embark on that quest, you'll need reflect upon your journey to determine the Secret Ninja Password."))
+					team.currentLevel = 1
+				}
+
+				team.resetLevelStates()
+
+				redisNeedsFlush[teamID] = true
+				mysqlNeedsFlush[teamID] = true
+			}
 		}
 
 		// Flush redis and mysql
@@ -94,12 +110,6 @@ func startSimulator(
 			if err != nil {
 				log.Errorf("Error fetching level status for team %s while flushing redis", teamID)
 				continue
-			}
-
-			if !levelStatus.won && levelStatus.state.IsWon() {
-				go redis.publishMessage(teamID, fmt.Sprintf("You have found the %s", levelStatus.state.ArtifactName()))
-				levelStatus.won = true
-				mysqlNeedsFlush[teamID] = true
 			}
 
 			go redis.flushRedis(teamID, levelStatus.state.Serialize())
@@ -179,13 +189,13 @@ func startSimulator(
 }
 
 // Channel processors
-func simulatorProcessMoves(moveChannel chan *moveCommand, teams teamMap, redisNeedsFlush teamSet, redis *redisConnection) {
+func simulatorProcessMoves(moveChannel chan *moveCommand, teams teamMap, redisNeedsFlush teamSet, redis *redisConnection, mysql *mysqlConnection) {
 	for i := 0; i < config.MaxBufferLength; i++ {
 		select {
 		case moveCmd := <-moveChannel:
 			teamID := moveCmd.teamID
 
-			didLoad, err := teams.touch(teamID, redis)
+			didLoad, err := teams.touch(teamID, redis, mysql)
 			if err != nil {
 				log.Errorw("Encountered an error touching team state while processing move command",
 					"error", err,
@@ -216,11 +226,11 @@ func simulatorProcessMoves(moveChannel chan *moveCommand, teams teamMap, redisNe
 	}
 }
 
-func simulatorProcessHeartbeats(heartbeatChannel chan string, teams teamMap, redisNeedsFlush teamSet, redis *redisConnection) {
+func simulatorProcessHeartbeats(heartbeatChannel chan string, teams teamMap, redisNeedsFlush teamSet, redis *redisConnection, mysql *mysqlConnection) {
 	for i := 0; i < config.MaxBufferLength; i++ {
 		select {
 		case teamID := <-heartbeatChannel:
-			didLoad, err := teams.touch(teamID, redis)
+			didLoad, err := teams.touch(teamID, redis, mysql)
 			if err != nil {
 				log.Errorw("Encountered an error touching team state while processing heartbeat command",
 					"error", err,
@@ -253,6 +263,7 @@ func simulatorProcessLevelChanges(
 	redisNeedsFlush teamSet,
 	redis *redisConnection,
 	mysqlNeedsFlush teamSet,
+	mysql *mysqlConnection,
 ) {
 	for i := 0; i < config.MaxBufferLength; i++ {
 		select {
@@ -260,7 +271,7 @@ func simulatorProcessLevelChanges(
 			teamID := changeLevelCommand.teamID
 			newLevel := changeLevelCommand.newLevel
 
-			_, err := teams.touch(teamID, redis)
+			_, err := teams.touch(teamID, redis, mysql)
 			if err != nil {
 				log.Errorw("Encountered an error touching team state while processing changeLevel command",
 					"error", err,
@@ -280,13 +291,6 @@ func simulatorProcessLevelChanges(
 					"teamID", teamID,
 					"level", newLevel)
 			}
-
-			// TODO: bring back this check
-			// if (newLevel > 1) && (!team.levels[newLevel-2].won) {
-			// 	log.Errorw("changeLevel command issued for a level that was not unlocked",
-			// 		"teamID", teamID,
-			// 		"level", newLevel)
-			// }
 
 			team.currentLevel = newLevel
 			team.resetLevelStates()

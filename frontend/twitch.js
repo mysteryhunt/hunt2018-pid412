@@ -450,6 +450,11 @@ function init() {
 	"keydown", function(event) {
 	    if (event.key == 'Enter') {
 		var msg = document.getElementById('entry').value;
+
+		if (!msg) {
+			return;
+		}
+
 		var send = true;
 		if (msg in commands) {
 		    send = move(msg.toUpperCase());

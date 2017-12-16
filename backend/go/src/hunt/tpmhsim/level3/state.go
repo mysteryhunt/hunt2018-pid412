@@ -7,7 +7,6 @@ import (
 	"time"
 )
 
-// TODO: correct values for these
 const spawnX = 1
 const spawnY = 24
 

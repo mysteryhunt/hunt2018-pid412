@@ -7,7 +7,11 @@ const DB = require('./db');
 
 DB.init();
 
-let fakeGameState = '1,1512620911301,1,28';
+const artifactNames = [
+  'Great Gi',
+  'Majestic Mask',
+  'Terrific Tabi',
+];
 
 function simPostCommand(path) {
   return new Promise((resolve, reject) => {
@@ -53,7 +57,7 @@ HuntJS.post('/move', async ({ team, data }) => {
   console.log(`Got direction command: ${data.direction}`);
   await simPostCommand(`/${team.id()}/move/${data.direction}`);
 
-  return null;
+  return {};
 }, {
   sessionRateLimit: {
     limit: 1,
@@ -73,12 +77,12 @@ HuntJS.post('/moveUnlimited', async ({ team, data }) => {
   console.log(`Got direction command: ${data.direction}`);
   await simPostCommand(`/${team.id()}/move/${data.direction}`);
 
-  return null;
+  return {};
 });
 
 HuntJS.post('/heartbeat', async ({ team }) => {
   simPostCommand(`/${team.id()}/heartbeat`);
-  return null;
+  return {};
 });
 
 HuntJS.get('/currentTime', async () => {
@@ -99,15 +103,18 @@ HuntJS.get('/levelData', ({ data }) => {
   return ['fake level data 1', 'fake level data 2'];
 });
 
-HuntJS.get('/teamStatus', () => {
-  // TODO: query actual team status from MySQL
+HuntJS.get('/teamStatus', async ({ team }) => {
+  const teamData = await DB.fetchTeamData(team.id());
+
+  const levelStatuses = teamData.levels.map((data, idx) => ({
+    won: data.won,
+    unlockedChunks: data.unlockedChunks,
+    artifact: data.won ? artifactNames[idx] : null,
+  }));
+
   return {
-    level: 1,
-    levelStatuses: [
-      { won: false, artifact: null, unlockedChunks: 4 },
-      { won: false, artifact: null, unlockedChunks: 2 },
-      { won: false, artifact: null, unlockedChunks: 2 },
-    ],
+    level: teamData.level,
+    levelStatuses,
   };
 });
 
@@ -116,9 +123,16 @@ HuntJS.post('/changeLevel', async ({ data, team }) => {
     throw HuntJS.Error(422, 'No level given');
   }
 
-  // if (!((data.level === 1) || (data.level === 2))) {
-  //   throw HuntJS.Error(422, 'You haven\'t unlocked that level');
-  // }
+  if (!((data.level === 1) || (data.level === 2) || (data.level === 3))) {
+    throw HuntJS.Error(422, `Invalid level: ${data.level}`);
+  }
+
+  if (data.level >= 2) {
+    const teamData = await DB.fetchTeamData(team.id());
+    if (!teamData || !teamData.levels[data.level - 2].won) {
+      throw HuntJS.Error(422, 'You haven\'t unlocked that level');
+    }
+  }
 
   await simPostCommand(`/${team.id()}/changeLevel/${data.level}`);
   return 'fake level data';
@@ -137,40 +151,11 @@ HuntJS.post('/sendChatMessage', ({ data, team }) => {
     message: data.message,
     name: data.name,
   }));
+
+  return {};
 }, {
   // team-wide rate limit to limit load on Redis
   rateLimitPerMinute: 300,
-});
-
-// For testing, clients can hit startFakeEmitters to send some garbage to the
-// pubsub channels
-const fakeEmittersStartedForTeamIds = new Set();
-HuntJS.post('/startFakeEmitters', ({ team }) => {
-  if (fakeEmittersStartedForTeamIds.has(team.id())) {
-    return null;
-  }
-
-  fakeEmittersStartedForTeamIds.add(team.id());
-
-  const fakeGameStates = ['1,1512620911301,1,28', '1,1512620911301,2,28', '1,1512620911301,2,27', '1,1512620911301,1,27'];
-  setInterval(() => {
-    const newIdx = (fakeGameStates.indexOf(fakeGameState) + 1) % fakeGameStates.length;
-    fakeGameState = fakeGameStates[newIdx];
-
-    team.publish('gameState', fakeGameState);
-  }, 1000);
-
-  const fakeMessages = [
-    'You have been eaten by a grue',
-    'You have fallen into lava',
-    'You have been spotted by a guard',
-  ];
-  setInterval(() => {
-    const message = fakeMessages[Math.floor(Math.random() * fakeMessages.length)];
-    team.publish('notifications', message);
-  }, 15000);
-
-  return null;
 });
 
 
