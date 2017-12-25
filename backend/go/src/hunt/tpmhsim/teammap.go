@@ -17,7 +17,7 @@ type levelStatus struct {
 
 type levelState interface {
 	MoveNinja(int8, int8) bool
-	RunFrame() (bool, []string)
+	RunFrame(bool, float64) (bool, []string, bool) // godMode, difficulty => didChange, []messages, didDie
 	CurrentChunk() int8
 	Serialize() string
 	IsWon() bool
@@ -26,6 +26,7 @@ type levelState interface {
 
 type teamData struct {
 	currentLevel  int8
+	difficulty    float64
 	lastHeartbeat time.Time
 	levels        [3]*levelStatus
 }
@@ -45,6 +46,25 @@ func (teams teamMap) getLevelStatus(teamID string) (*levelStatus, error) {
 
 func (team *teamData) getLevelStatus() *levelStatus {
 	return team.levels[team.currentLevel-1]
+}
+
+func (team *teamData) toMysqlData() *mysqlTeamData {
+	return &mysqlTeamData{
+		level: team.currentLevel,
+
+		level1Won:            team.levels[0].won,
+		level1UnlockedChunks: team.levels[0].unlockedChunks,
+
+		level2Won:            team.levels[1].won,
+		level2UnlockedChunks: team.levels[1].unlockedChunks,
+
+		level3Won:            team.levels[2].won,
+		level3UnlockedChunks: team.levels[2].unlockedChunks,
+	}
+}
+
+func (team *teamData) godModeActive() bool {
+	return team.levels[0].won && team.levels[1].won && team.levels[2].won
 }
 
 // Call this before working with teams[teamID]. Initializes values from Redis,
@@ -68,6 +88,7 @@ func (teams teamMap) touch(teamID string, redis *redisConnection, mysql *mysqlCo
 		// Create a fresh state
 		data = teamData{
 			currentLevel:  1,
+			difficulty:    1,
 			lastHeartbeat: time.Now(),
 			levels: [3]*levelStatus{
 				&levelStatus{
@@ -87,10 +108,13 @@ func (teams teamMap) touch(teamID string, redis *redisConnection, mysql *mysqlCo
 				},
 			},
 		}
+
+		go mysql.flushMysql(teamID, data.toMysqlData())
 	} else {
 		// populate a state
 		data = teamData{
 			currentLevel:  teamMysqlData.level,
+			difficulty:    teamMysqlData.difficulty,
 			lastHeartbeat: time.Now(),
 			levels: [3]*levelStatus{
 				&levelStatus{

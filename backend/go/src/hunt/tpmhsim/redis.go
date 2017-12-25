@@ -66,6 +66,16 @@ func (conn *redisConnection) publishMessage(teamID string, message string) {
 	}
 }
 
+func (conn *redisConnection) publishDeathCount(teamID string, deaths int) {
+	err := conn.client.Publish(conn.buildRedisKey(teamID, "deaths"), deaths).Err()
+	if err != nil {
+		log.Errorw("Error publishing death count notification to Redis",
+			"teamID", teamID,
+			"deaths", deaths,
+			"error", err)
+	}
+}
+
 // return (state, isNil, error)
 func (conn *redisConnection) loadState(teamID string) (string, bool, error) {
 	state, err := conn.client.Get(conn.buildRedisKey(teamID, "gameState")).Result()

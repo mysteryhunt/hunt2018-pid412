@@ -44,15 +44,15 @@ func (state *State) killNinja() {
 	state.dartLaunchTimes = [24]*time.Time{}
 }
 
-func (state *State) RunFrame() (bool, []string) {
+func (state *State) RunFrame(godMode bool, difficulty float64) (bool, []string, bool) {
 	x := state.ninjaX
 	y := state.ninjaY
 	now := time.Now()
 
 	// Check lava
-	if lavaMap[y][x] {
+	if !godMode && lavaMap[y][x] {
 		state.killNinja()
-		return true, []string{"You fell into lava!"}
+		return true, []string{"You fell into lava!"}, true
 	}
 
 	// Launch darts
@@ -61,31 +61,33 @@ func (state *State) RunFrame() (bool, []string) {
 		state.dartLaunchTimes[activatedLauncher] = &now
 	}
 
-	// Check darts
-	for i, launchTime := range state.dartLaunchTimes {
-		if launchTime == nil {
-			continue
+	if !godMode {
+		// Check darts
+		for i, launchTime := range state.dartLaunchTimes {
+			if launchTime == nil {
+				continue
+			}
+
+			dartX, dartY := dartPosition(i, now.Sub(*launchTime).Seconds()*difficulty)
+			if (dartX >= 30) || (dartX < 0) || (dartY >= 30) || (dartY < 0) || !validMoves[dartY][dartX] {
+				state.dartLaunchTimes[i] = nil
+			}
+
+			if (dartX == state.ninjaX) && (dartY == state.ninjaY) {
+				state.killNinja()
+				return true, []string{"You were hit by a dart!"}, true
+			}
 		}
 
-		dartX, dartY := dartPosition(i, now.Sub(*launchTime))
-		if (dartX >= 30) || (dartX < 0) || (dartY >= 30) || (dartY < 0) || !validMoves[dartY][dartX] {
-			state.dartLaunchTimes[i] = nil
-		}
-
-		if (dartX == state.ninjaX) && (dartY == state.ninjaY) {
+		// Check guards
+		t := int(now.Sub(state.startTime).Seconds() * difficulty)
+		if squareIsGuarded(state.ninjaX, state.ninjaY, t) {
 			state.killNinja()
-			return true, []string{"You were hit by a dart!"}
+			return true, []string{"You were spotted by a guard!"}, true
 		}
 	}
 
-	// Check guards
-	t := int(now.Sub(state.startTime).Seconds())
-	if squareIsGuarded(state.ninjaX, state.ninjaY, t) {
-		state.killNinja()
-		return true, []string{"You were spotted by a guard!"}
-	}
-
-	return false, nil
+	return false, nil, false
 }
 
 func (state *State) CurrentChunk() int8 {

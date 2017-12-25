@@ -55,7 +55,7 @@ func startSimulator(
 		mysqlNeedsFlush := make(teamSet)
 
 		// Process commands from the channels
-		simulatorProcessMoves(moveChannel, teams, redisNeedsFlush, redis, mysql)
+		simulatorProcessMoves(moveChannel, teams, redisNeedsFlush, redis, mysqlNeedsFlush, mysql)
 		simulatorProcessHeartbeats(heartbeatChannel, teams, redisNeedsFlush, redis, mysql)
 		simulatorProcessRefreshRequests(refreshGameStateChannel, redisNeedsFlush)
 		simulatorProcessLevelChanges(changeLevelChannel, teams, redisNeedsFlush, redis, mysqlNeedsFlush, mysql)
@@ -67,46 +67,7 @@ func startSimulator(
 		//   - team has not won the level and the level is now won
 		//   - (current chunk + 2) > unlockedChunks
 		for teamID, team := range teams {
-			teamLevelStatus := team.getLevelStatus()
-			teamLevelState := teamLevelStatus.state
-
-			didChange, messages := teamLevelState.RunFrame()
-
-			if didChange {
-				redisNeedsFlush[teamID] = true
-
-				if (teamLevelState.CurrentChunk() + 2) > teamLevelStatus.unlockedChunks {
-					teamLevelStatus.unlockedChunks = (teamLevelState.CurrentChunk() + 2)
-					mysqlNeedsFlush[teamID] = true
-				}
-			}
-
-			if (messages != nil) && (len(messages) > 0) {
-				for _, message := range messages {
-					go redis.publishMessage(teamID, message)
-				}
-			}
-
-			if teamLevelState.IsWon() {
-				msg := fmt.Sprintf("You have found the %s!", teamLevelState.ArtifactName())
-
-				if team.currentLevel == 3 {
-					msg += " You've found all three legendary treasures! You're well on your way to challenging the Ninja Master for the Scroll of Ninja Mastery... but that's another puzzle."
-				}
-
-				go redis.publishMessage(teamID, msg)
-
-				teamLevelStatus.won = true
-				team.currentLevel = team.currentLevel + 1
-				if team.currentLevel > 3 {
-					team.currentLevel = 1
-				}
-
-				team.resetLevelStates()
-
-				redisNeedsFlush[teamID] = true
-				mysqlNeedsFlush[teamID] = true
-			}
+			simulatorRunFrame(teamID, team, redisNeedsFlush, redis, mysqlNeedsFlush, mysql)
 		}
 
 		// Flush redis and mysql
@@ -123,22 +84,11 @@ func startSimulator(
 		for teamID := range mysqlNeedsFlush {
 			team := teams[teamID]
 			if team == nil {
-				log.Errorf("Error fetching level status for team %s while flushing redis", teamID)
+				log.Errorf("Error fetching level status for team %s while flushing mysql", teamID)
 				continue
 			}
 
-			go mysql.flushMysql(teamID, &mysqlTeamData{
-				level: team.currentLevel,
-
-				level1Won:            team.levels[0].won,
-				level1UnlockedChunks: team.levels[0].unlockedChunks,
-
-				level2Won:            team.levels[1].won,
-				level2UnlockedChunks: team.levels[1].unlockedChunks,
-
-				level3Won:            team.levels[2].won,
-				level3UnlockedChunks: team.levels[2].unlockedChunks,
-			})
+			go mysql.flushMysql(teamID, team.toMysqlData())
 		}
 
 		// Prune abandoned games
@@ -194,7 +144,7 @@ func startSimulator(
 }
 
 // Channel processors
-func simulatorProcessMoves(moveChannel chan *moveCommand, teams teamMap, redisNeedsFlush teamSet, redis *redisConnection, mysql *mysqlConnection) {
+func simulatorProcessMoves(moveChannel chan *moveCommand, teams teamMap, redisNeedsFlush teamSet, redis *redisConnection, mysqlNeedsFlush teamSet, mysql *mysqlConnection) {
 	for i := 0; i < config.MaxBufferLength; i++ {
 		select {
 		case moveCmd := <-moveChannel:
@@ -224,6 +174,14 @@ func simulatorProcessMoves(moveChannel chan *moveCommand, teams teamMap, redisNe
 
 			if levelStatus.state.MoveNinja(deltaX, deltaY) {
 				redisNeedsFlush[teamID] = true
+
+				team := teams[teamID]
+				if team == nil {
+					log.Errorf("Error fetching level status for team %s while preparing for post-move simulation", teamID)
+					continue
+				}
+
+				simulatorRunFrame(teamID, team, redisNeedsFlush, redis, mysqlNeedsFlush, mysql)
 			}
 		default:
 			return
@@ -306,5 +264,63 @@ func simulatorProcessLevelChanges(
 		default:
 			return
 		}
+	}
+}
+
+func simulatorRunFrame(
+	teamID string,
+	team *teamData,
+	redisNeedsFlush teamSet,
+	redis *redisConnection,
+	mysqlNeedsFlush teamSet,
+	mysql *mysqlConnection,
+) {
+	teamLevelStatus := team.getLevelStatus()
+	teamLevelState := teamLevelStatus.state
+
+	didChange, messages, didDie := teamLevelState.RunFrame(team.godModeActive(), team.difficulty)
+
+	if didChange {
+		redisNeedsFlush[teamID] = true
+
+		if (teamLevelState.CurrentChunk() + 2) > teamLevelStatus.unlockedChunks {
+			teamLevelStatus.unlockedChunks = (teamLevelState.CurrentChunk() + 2)
+			mysqlNeedsFlush[teamID] = true
+		}
+	}
+
+	if (messages != nil) && (len(messages) > 0) {
+		for _, message := range messages {
+			go redis.publishMessage(teamID, message)
+		}
+	}
+
+	if didDie {
+		go mysql.incrementDeathCounter(teamID, redis)
+	}
+
+	if teamLevelState.IsWon() {
+		msg := fmt.Sprintf("You have found the %s!", teamLevelState.ArtifactName())
+
+		if team.currentLevel == 3 {
+			msg += " You've found all three legendary treasures!"
+		}
+
+		go redis.publishMessage(teamID, msg)
+
+		if team.currentLevel == 3 {
+			go redis.publishMessage(teamID, "You may have <b>evaded my guards</b>, <b>traversed my dungeons</b>, and <b>stolen my treasures</b>, but you will still need the password in order to confront me in another puzzle!")
+		}
+
+		teamLevelStatus.won = true
+		team.currentLevel = team.currentLevel + 1
+		if team.currentLevel > 3 {
+			team.currentLevel = 1
+		}
+
+		team.resetLevelStates()
+
+		redisNeedsFlush[teamID] = true
+		mysqlNeedsFlush[teamID] = true
 	}
 }

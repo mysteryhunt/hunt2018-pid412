@@ -64,7 +64,7 @@ TimeSync = (function() {
     start(huntClient) {
       client = huntClient;
       takeSample();
-      setInterval(takeSample, 5000);
+      setInterval(takeSample, 2000);
     },
 
     getTime() {

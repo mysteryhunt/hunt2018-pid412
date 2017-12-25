@@ -285,6 +285,8 @@ var guardCycleLen = 22;
 
 var windowSize = 11;
 
+var difficulty = 1;
+
 function plot(level, map, time, startTime, pr, pc, rest) {
     // First, preprocess moving things.
     var dartmap = {};
@@ -309,7 +311,7 @@ function plot(level, map, time, startTime, pr, pc, rest) {
 		    var dartc = c;
 		    var inflight = true;
 		    //console.log(launchmap[index], time);
-		    for (var flight = 0; flight < (time - launchmap[index]) / 2;
+		    for (var flight = 0; flight < ((time - launchmap[index]) * difficulty) / 2;
 			 ++flight) {
 			dartr += dr;
 			dartc += dc;
@@ -332,7 +334,7 @@ function plot(level, map, time, startTime, pr, pc, rest) {
 	    var statue;
 	    if (rest[i] < 0) {
 		statue = 'ss';
-	    } else if (time - (rest[i] / 1000) >= 3) {
+	    } else if (((time - (rest[i] / 1000)) * difficulty) >= 3) {
 		statue = 'sa';
 	    } else {
 		statue = 'sw';
@@ -342,7 +344,7 @@ function plot(level, map, time, startTime, pr, pc, rest) {
     }
     //console.log(statuemap);
 
-    var t = time - startTime;
+    var t = (time - startTime) * difficulty;
     var html = '';
     var ro = pr - (windowSize - 1)/2;
     if (ro < 0) ro = 0;
@@ -412,7 +414,8 @@ function handleState(level, startTime, ninjaX, ninjaY) {
     tick();
     if (lastLevel != level) {
 	lastLevel = level;
-	updateTeamStatus();
+
+	setTimeout(updateTeamStatus, 1000);
     }
 }
 
@@ -434,6 +437,20 @@ function handleTeamStatus(level, levelStatuses) {
     }
     document.getElementById('levelbit').innerHTML = extra;
     document.getElementById('inventory').innerHTML = inventory;
+
+    if (levelStatuses[0].won && levelStatuses[1].won && levelStatuses[2].won) {
+    	document.getElementById('godMode').style.display = 'block';
+    } else {
+    	document.getElementById('godMode').style.display = 'none';
+    }
+}
+
+function setDifficulty(newDifficulty) {
+	difficulty = newDifficulty;
+}
+
+function handleDeaths(deaths) {
+	document.getElementById('deathCount').innerText = deaths;
 }
 
 function tick() {
@@ -495,8 +512,32 @@ function init() {
     setInterval(tick, 100);
 }
 
-function addToChat(message) {
+function addToChat(message, sender, classArg) {
+		var className = classArg || '';
+
     var chat = document.getElementById('chat');
-    chat.innerHTML += message + '<br>';
+
+    var msgSpan = document.createElement('span');
+    msgSpan.className = className;
+
+    if (sender) {
+    	var senderEl = document.createElement('b');
+    	senderEl.innerText = sender;
+
+    	msgSpan.appendChild(senderEl);
+    	msgSpan.appendChild(document.createTextNode(': '));
+    }
+
+    bodySpan = document.createElement('span');
+    bodySpan.appendChild(document.createTextNode(message))
+
+    // allow <b>
+    bodySpan.innerHTML = bodySpan.innerHTML.replace(/&lt;b&gt;/g, '<b>').replace(/&lt;\/b&gt;/g, '</b>')
+
+    msgSpan.appendChild(bodySpan);
+
+    chat.appendChild(msgSpan);
+    chat.appendChild(document.createElement('br'));
+
     chat.scrollTop = chat.scrollHeight;
 }

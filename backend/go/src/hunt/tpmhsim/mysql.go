@@ -6,7 +6,8 @@ import "fmt"
 import "regexp"
 
 type mysqlTeamData struct {
-	level int8
+	level      int8
+	difficulty float64
 
 	level1Won            bool
 	level1UnlockedChunks int8
@@ -149,6 +150,7 @@ func (conn *mysqlConnection) loadTeamData(teamID string) (*mysqlTeamData, error)
 		`
 			SELECT
 				tpmh_team_levels.level AS team_level,
+				tpmh_team_levels.difficulty AS difficulty,
 				level_1.won AS level_1_won,
 				level_1.unlocked_chunks AS level_1_unlocked_chunks,
 				level_2.won AS level_2_won,
@@ -175,6 +177,7 @@ func (conn *mysqlConnection) loadTeamData(teamID string) (*mysqlTeamData, error)
 
 	err := conn.client.QueryRow(query).Scan(
 		&data.level,
+		&data.difficulty,
 		&levelsWonBits[0],
 		&data.level1UnlockedChunks,
 		&levelsWonBits[1],
@@ -196,4 +199,40 @@ func (conn *mysqlConnection) loadTeamData(teamID string) (*mysqlTeamData, error)
 	data.level3Won = bitToBool(levelsWonBits[2])
 
 	return &data, nil
+}
+
+func (conn *mysqlConnection) incrementDeathCounter(teamID string, redis *redisConnection) {
+	_, err := conn.client.Exec(`
+		UPDATE tpmh_team_levels
+		SET deaths = deaths + 1
+		WHERE team = ?;
+	`, teamID)
+
+	if err != nil {
+		log.Errorw("Team ID was invalid; not incrementing death counter",
+			"teamID", teamID,
+			"err", err)
+
+		return
+	}
+
+	var deaths int
+	err = conn.client.
+		QueryRow(`SELECT deaths FROM tpmh_team_levels WHERE team = ?`, teamID).
+		Scan(&deaths)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			log.Errorw("No rows when reading team death count",
+				"teamID", teamID)
+
+			return
+		}
+
+		log.Errorw("Error while reading team death count",
+			"teamID", teamID,
+			"error", err)
+	}
+
+	redis.publishDeathCount(teamID, deaths)
 }

@@ -37,24 +37,25 @@ function clientInit() {
     heartbeat();
     setInterval(heartbeat, 2 * 60 * 1000);
 
-    // Start up pubsub
-    // client.post('/startFakeEmitters')
-    //     .then(() => console.log('Fake emitters started'))
-    //     .catch(e => console.log('/startFakeEmitters failed', e));
 
     client.subscribe('gameState', (newState) => {
         //console.log('New game state:', newState);
-	handleState.apply(null, eval('['+newState+']'));
+	handleState.apply(null, JSON.parse('['+newState+']'));
     });
 
     client.subscribe('notifications', msg => {
         var className = msg.indexOf('You have found') > -1 ? 'info' : 'warn'
-        addToChat('<span class="' + className + '">' + msg + '</span>');
+        addToChat(msg, null, className);
     });
+
     client.subscribe('chatMessages', msg => {
-	msg = eval('('+msg+')');
-	addToChat('<b>' + msg['name'] + '</b>: ' + msg['message'])
+	msg = JSON.parse(msg);
+	addToChat(msg.message, msg.name);
     });
+
+    client.subscribe('deaths', msg => {
+        handleDeaths(Number(msg));
+    })
 
     TimeSync.start(client);
 
@@ -125,6 +126,11 @@ function sendChatMessage(message, name) {
 
 function updateTeamStatus() {
     client.get('/teamStatus')
-	.then(r => handleTeamStatus(r['level'], r['levelStatuses']))
+	.then(r => {
+                console.log(r);
+        handleTeamStatus(r['level'], r['levelStatuses']);
+        setDifficulty(r.difficulty);
+        handleDeaths(r.deaths);
+    })
 	.catch(e => console.error('/teamStatus failed', e));
 }

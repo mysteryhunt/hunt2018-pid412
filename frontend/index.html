@@ -28,7 +28,6 @@
   </head>
   <body onload="init()">
     <h1>Twitch Plays Mystery Hunt</h1>
-    <p class="flavor">So, Ninja, you seek to claim the Scroll of Ninja Mastery? Before you can challenge the Ninja Master, you must navigate his dungeons and evade his guards to obtain the three legendary treasures!</p>
     <p class="testsolver-note">Note to testsolvers: there are some protections for the client-side and server-side code that are not yet in place for this puzzle. For now, please do not view or modify the source code of this page. Also, do not interact with the backend in any way other than via this webpack (e.g. via curl commands, custom scripts, or custom webpages). Anything else is fair game, and we'll have another round of anything-goes testing after we've finished up the protections.</p>
 
     <div id="main">
@@ -42,12 +41,16 @@
       <div id="chat"></div>
       <div>&gt; <input id="entry" type="text" /></div>
     </div>
+    <p id="status">Status: <span id="status-text">ready</span></p>
+
     <p>Commands: n, s, e, w, ne, se, nw, sw,
       restart level<span id="levelbit"></span></p>
 
     <p>Treasures: <span id="inventory"></span></p>
 
-    <p id="status">Status: <span id="status-text">ready</span></p>
+    <p>Death Count: <span id="deathCount"></span></p>
+
+    <p id="godMode" style="display: none">Your ninja ability has leveled up! You can now hide in plain sight, walk on lava, and you are invulnerable to all forms of damage.</p>
 
     <div id="debugtools">
       <!--

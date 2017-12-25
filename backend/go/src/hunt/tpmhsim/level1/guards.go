@@ -72,5 +72,6 @@ func squareIsGuarded(x int8, y int8, t int) bool {
 	if (t % guardCycleLen) < (guardCycleLen / 2) {
 		return guardsRight[y][x]
 	}
+
 	return guardsLeft[y][x]
 }

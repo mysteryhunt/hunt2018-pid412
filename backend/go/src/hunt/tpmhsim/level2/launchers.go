@@ -1,9 +1,5 @@
 package level2
 
-import (
-	"time"
-)
-
 // Position of each launcher, the velocity of the darts coming out of them
 // (in practice, only one of vs and vy is non-zero, and the only non-zero values
 // are 1 and -1)
@@ -47,8 +43,8 @@ var launchers = [25]*launcherSpec{
 
 const secondsPerDartMove = 2
 
-func dartPosition(launcherIdx int, launchedAgo time.Duration) (int8, int8) {
-	numMoves := (int8(launchedAgo.Seconds()) / secondsPerDartMove) + 1
+func dartPosition(launcherIdx int, launchedAgoSeconds float64) (int8, int8) {
+	numMoves := (int8(launchedAgoSeconds / secondsPerDartMove)) + 1
 	launcher := launchers[launcherIdx]
 
 	return launcher.x + (launcher.vx * numMoves), launcher.y + (launcher.vy * numMoves)

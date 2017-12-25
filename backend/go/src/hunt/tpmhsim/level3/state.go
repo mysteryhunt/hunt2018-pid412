@@ -112,7 +112,7 @@ func (state *State) MoveNinja(deltaX int8, deltaY int8) bool {
 	return false
 }
 
-func (state *State) RunFrame() (bool, []string) {
+func (state *State) RunFrame(godMode bool, difficulty float64) (bool, []string, bool) {
 	now := time.Now()
 	didChange := false
 	messages := []string{}
@@ -132,14 +132,14 @@ func (state *State) RunFrame() (bool, []string) {
 				statue.wakeTime = &now
 				didChange = true
 			}
-		} else if now.Sub(*statue.wakeTime).Seconds() > 3 {
+		} else if (now.Sub(*statue.wakeTime).Seconds() * difficulty) > 3 {
 			// statue is awake
 			if distance >= 7 {
 				// ninja got out of range
 				statue.wakeTime = nil
 				statue.moveTime = nil
 				didChange = true
-			} else if (statue.moveTime == nil) || now.Sub(*statue.moveTime).Seconds() > 2 {
+			} else if (statue.moveTime == nil) || (now.Sub(*statue.moveTime).Seconds()*difficulty) > 2 {
 				// it's been more than 2 seconds since we moved
 				canMove, moveDir := getMoveDirection(state.ninjaX, state.ninjaY, idx, state.statues)
 
@@ -162,38 +162,42 @@ func (state *State) RunFrame() (bool, []string) {
 			}
 		}
 
-		// check if the statue fell into lava
-		if lavaMap[statue.y][statue.x] {
-			statue.moveTime = nil
-			statue.wakeTime = nil
-			statue.x = -1
-			statue.y = -1
+		if !godMode {
+			// check if the statue fell into lava
+			if lavaMap[statue.y][statue.x] {
+				statue.moveTime = nil
+				statue.wakeTime = nil
+				statue.x = -1
+				statue.y = -1
 
-			messages = append(messages, "An ogre fell into lava!")
-			didChange = true
+				messages = append(messages, "An ogre fell into lava!")
+				didChange = true
+			}
+
+			// check if the statue caught the player
+			if (statue.x == state.ninjaX) && (statue.y == state.ninjaY) {
+				state.killNinja()
+				return true, []string{"You were caught by an ogre!"}, true
+			}
 		}
+	}
 
-		// check if the statue caught the player
-		if (statue.x == state.ninjaX) && (statue.y == state.ninjaY) {
+	if !godMode {
+		// Check if the player fell into lava
+		if lavaMap[state.ninjaY][state.ninjaX] {
 			state.killNinja()
-			return true, []string{"You were caught by an ogre!"}
+			return true, []string{"You fell into lava!"}, true
+		}
+
+		// Check guards
+		t := int(now.Sub(state.startTime).Seconds() * difficulty)
+		if squareIsGuarded(state.ninjaX, state.ninjaY, t) {
+			state.killNinja()
+			return true, []string{"You were spotted by a guard!"}, true
 		}
 	}
 
-	// Check if the player fell into lava
-	if lavaMap[state.ninjaY][state.ninjaX] {
-		state.killNinja()
-		return true, []string{"You fell into lava!"}
-	}
-
-	// Check guards
-	t := int(now.Sub(state.startTime).Seconds())
-	if squareIsGuarded(state.ninjaX, state.ninjaY, t) {
-		state.killNinja()
-		return true, []string{"You were spotted by a guard!"}
-	}
-
-	return didChange, messages
+	return didChange, messages, false
 }
 
 func (state *State) CurrentChunk() int8 {

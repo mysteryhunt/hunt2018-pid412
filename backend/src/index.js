@@ -105,6 +105,7 @@ HuntJS.get('/levelData', ({ data }) => {
 
 HuntJS.get('/teamStatus', async ({ team }) => {
   const teamData = await DB.fetchTeamData(team.id());
+  console.log(teamData);
 
   const levelStatuses = teamData.levels.map((data, idx) => ({
     won: data.won,
@@ -114,6 +115,8 @@ HuntJS.get('/teamStatus', async ({ team }) => {
 
   return {
     level: teamData.level,
+    difficulty: teamData.difficulty,
+    deaths: teamData.deaths,
     levelStatuses,
   };
 });

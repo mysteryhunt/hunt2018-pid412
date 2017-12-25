@@ -40,20 +40,24 @@ func (state *State) killNinja() {
 	state.ninjaX, state.ninjaY = spawnPointFor(state.ninjaX, state.ninjaY)
 }
 
-func (state *State) RunFrame() (bool, []string) {
-	t := int(time.Now().Sub(state.startTime).Seconds())
+func (state *State) RunFrame(godMode bool, difficulty float64) (bool, []string, bool) {
+	if godMode {
+		return false, nil, false
+	}
+
+	t := int(time.Now().Sub(state.startTime).Seconds() * float64(difficulty))
 
 	if squareIsLava(state.ninjaX, state.ninjaY, t) {
 		state.killNinja()
-		return true, []string{"You fell into lava!"}
+		return true, []string{"You fell into lava!"}, true
 	}
 
 	if squareIsGuarded(state.ninjaX, state.ninjaY, t) {
 		state.killNinja()
-		return true, []string{"You were spotted by a guard!"}
+		return true, []string{"You were spotted by a guard!"}, true
 	}
 
-	return false, nil
+	return false, nil, false
 }
 
 func (state *State) CurrentChunk() int8 {

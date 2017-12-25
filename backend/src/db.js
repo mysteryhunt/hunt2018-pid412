@@ -6,6 +6,8 @@ module.exports = {
       CREATE TABLE IF NOT EXISTS tpmh_team_levels (
         team varchar(128) COLLATE utf8mb4_bin NOT NULL,
         level tinyint NOT NULL DEFAULT 1,
+        deaths int NOT NULL DEFAULT 0,
+        difficulty float NOT NULL DEFAULT 1,
         PRIMARY KEY (team)
       ) ENGINE=InnoDB;
     `, (err) => {
@@ -35,6 +37,8 @@ module.exports = {
         `
           SELECT
             tpmh_team_levels.level AS team_level,
+            tpmh_team_levels.deaths AS team_deaths,
+            tpmh_team_levels.difficulty AS team_difficulty,
             level_1.won AS level_1_won,
             level_1.unlocked_chunks AS level_1_unlocked_chunks,
             level_2.won AS level_2_won,
@@ -59,12 +63,13 @@ module.exports = {
             reject(err);
             return;
           }
-          console.log(res);
 
           if (res.length === 0) {
             // return defaults
             resolve({
               level: 1,
+              deaths: 0,
+              difficulty: 1,
               levels: [
                 { won: false, unlockedChunks: 2 },
                 { won: false, unlockedChunks: 2 },
@@ -75,6 +80,8 @@ module.exports = {
             const data = res[0];
             resolve({
               level: data.team_level,
+              deaths: data.team_deaths,
+              difficulty: data.team_difficulty,
               levels: [
                 { won: data.level_1_won, unlockedChunks: data.level_1_unlocked_chunks },
                 { won: data.level_2_won, unlockedChunks: data.level_2_unlocked_chunks },
