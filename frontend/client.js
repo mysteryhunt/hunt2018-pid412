@@ -43,8 +43,12 @@ function clientInit() {
 	handleState.apply(null, JSON.parse('['+newState+']'));
     });
 
+    function messageIsInfo(msg) {
+        return (msg.indexOf('You have found') > -1) || (msg.indexOf('leveled up') > -1);
+    }
+
     client.subscribe('notifications', msg => {
-        var className = msg.indexOf('You have found') > -1 ? 'info' : 'warn'
+        var className = messageIsInfo(msg) ? 'info' : 'warn'
         addToChat(msg, null, className);
     });
 

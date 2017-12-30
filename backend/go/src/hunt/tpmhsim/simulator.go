@@ -310,6 +310,7 @@ func simulatorRunFrame(
 
 		if team.currentLevel == 3 {
 			go redis.publishMessage(teamID, "You may have <b>evaded my guards</b>, <b>traversed my dungeons</b>, and <b>stolen my treasures</b>, but you will still need the password in order to confront me in another puzzle!")
+			go redis.publishMessage(teamID, "Your ninja ability has leveled up! You can now hide in plain sight, walk on lava, and you are invulnerable to all forms of damage.")
 		}
 
 		teamLevelStatus.won = true

@@ -162,18 +162,18 @@ func (state *State) RunFrame(godMode bool, difficulty float64) (bool, []string, 
 			}
 		}
 
+		// check if the statue fell into lava
+		if lavaMap[statue.y][statue.x] {
+			statue.moveTime = nil
+			statue.wakeTime = nil
+			statue.x = -1
+			statue.y = -1
+
+			messages = append(messages, "An ogre fell into lava!")
+			didChange = true
+		}
+
 		if !godMode {
-			// check if the statue fell into lava
-			if lavaMap[statue.y][statue.x] {
-				statue.moveTime = nil
-				statue.wakeTime = nil
-				statue.x = -1
-				statue.y = -1
-
-				messages = append(messages, "An ogre fell into lava!")
-				didChange = true
-			}
-
 			// check if the statue caught the player
 			if (statue.x == state.ninjaX) && (statue.y == state.ninjaY) {
 				state.killNinja()
