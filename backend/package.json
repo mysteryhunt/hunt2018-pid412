@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "huntjs-backend": "https://github.com/benweissmann/huntjs-backend.git#1afefe4bf3fd7452e4010c7e7b22e496e7b8ee72",
+    "huntjs-backend": "https://github.com/benweissmann/huntjs-backend.git#965a6613a671bd0aca56643493c4ea08bc4eb5ba",
     "request": "^2.83.0"
   },
   "devDependencies": {

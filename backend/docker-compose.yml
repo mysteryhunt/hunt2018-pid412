@@ -38,6 +38,10 @@ services:
       HUNT_REDIS_URL: 'redis://redis:6379'
       HUNT_PORT: 80
       HUNT_CORS_ORIGIN: '*'
+      HUNT_AUTH_ALLOW_DEV: 'true'
+      HUNT_AUTH_JWT_SECRET: 'devsecret'
+      HUNT_CANONICAL_PUZZLE_ID: 'TBD'
+      HUNT_AUTH_ADMIN_PW: 'devpassword'
       SIMULATION_SERVICE_ADDRESS: 'http://puzzle-sim'
       # Or, to talk to a local instance:
       # SIMULATION_SERVICE_ADDRESS: 'http://docker.for.mac.localhost:8080'
