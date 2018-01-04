@@ -6,13 +6,16 @@ import { addToChat, handleTeamStatus, handleState, handleDeaths, setDifficulty, 
 let client;
 
 let rateLimitEnabled = true;
-let delayEnabled = true;
-let status = 'ready'; // ready, submitting, or wait
+let status = 'wait'; // ready, submitting, or wait
+
+const worker = new Worker('worker/worker.js');
 
 function changeStatus(newStatus) {
   status = newStatus;
   document.getElementById('status-text').innerText = status;
 }
+
+setTimeout(() => changeStatus('ready'), 4000);
 
 function wait(time) {
   return new Promise((resolve) => {
@@ -20,9 +23,41 @@ function wait(time) {
   });
 }
 
+function solveChallenge(jwt) {
+  const data = JSON.parse(atob(jwt.split('.')[1]));
+  const chall = data.challenge;
+  const sess = data.sessionId;
+
+  return new Promise((resolve, reject) => {
+    let done = false;
+
+    const timeout = setTimeout(() => {
+      if (done) {
+        return;
+      }
+
+      done = true;
+      reject(new Error('Timed out'));
+    }, 2000);
+
+    worker.onmessage = (e) => {
+      if (done) {
+        return;
+      }
+
+      done = true;
+      clearTimeout(timeout);
+      resolve(e.data);
+    };
+
+    worker.postMessage({ sess, chall });
+  });
+}
+
 function clientInit() {
   // To connect to the dev backend
   client = HuntJSClient.connect('tpmh', 'http://localhost:8000');
+  HuntJSClient.overrideAuth('test-team', 'dev');
 
   // To connect to the prod backend
   // client = HuntJSClient.connect('tpmh', 'https://puzzle-tpmh.head-hunters.org');
@@ -72,6 +107,15 @@ function getTime() {
 }
 
 function move(direction) {
+  if (!rateLimitEnabled) {
+    changeStatus('submitting');
+    client.post('/moveUnlimited', { direction })
+      .catch(e => toastr.error(e.message))
+      .then(() => changeStatus('ready'));
+
+    return true;
+  }
+
   if (status === 'submitting') {
     toastr.error('Move already in progress');
     return false;
@@ -82,18 +126,23 @@ function move(direction) {
     return false;
   }
 
-  const endpoint = rateLimitEnabled ? '/move' : '/moveUnlimited';
-  const delay = delayEnabled ? 1000 : 0;
-  const rateLimit = rateLimitEnabled ? (4000 - delay) : 0;
-
   changeStatus('submitting');
-
-  wait(delay)
-    .then(() => client.post(endpoint, { direction }))
+  client.get('/challenge')
+    .then(challenge =>
+      solveChallenge(challenge).then(solution => ({
+        challenge,
+        solution,
+      })),
+    )
+    .then(({ challenge, solution }) => client.post('/move', { direction, challenge, solution }))
     .then(() => changeStatus('wait'))
-    .then(() => wait(rateLimit))
-    .catch(e => toastr.error(e.message))
+    .then(() => wait(3000))
+    .catch((e) => {
+      console.log(e);
+      toastr.error(e.message);
+    })
     .then(() => changeStatus('ready'));
+
   return true;
 }
 
@@ -106,12 +155,6 @@ function toggleRateLimiting() {
   document.getElementById('rate-limit-indicator').innerText = String(rateLimitEnabled);
 }
 window.toggleRateLimiting = toggleRateLimiting;
-
-function toggleDelay() {
-  delayEnabled = !delayEnabled;
-  document.getElementById('delay-indicator').innerText = String(delayEnabled);
-}
-window.toggleDelay = toggleDelay;
 
 function changeLevel(level) {
   changeStatus('submitting');
@@ -128,7 +171,6 @@ function sendChatMessage(message, name) {
 function updateTeamStatus() {
   client.get('/teamStatus')
     .then((r) => {
-      console.log(r);
       handleTeamStatus(r.level, r.levelStatuses);
       setDifficulty(r.difficulty);
       handleDeaths(r.deaths);

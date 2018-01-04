@@ -1,5 +1,6 @@
 const mysql = require('huntjs-backend')._mysql;
 
+
 module.exports = {
   init() {
     mysql.query(`

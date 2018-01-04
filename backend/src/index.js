@@ -3,6 +3,7 @@
 const HuntJS = require('huntjs-backend');
 const request = require('request');
 
+const challenge = require('./challenge');
 const DB = require('./db');
 const maps = require('./maps');
 
@@ -46,16 +47,21 @@ function simGetValue(path) {
   });
 }
 
-HuntJS.post('/move', async ({ team, data }) => {
+HuntJS.post('/move', async ({ team, data, session }) => {
   if (!data || !data.direction) {
     throw HuntJS.Error(422, 'No direction given');
+  }
+
+  if (!data.challenge || !data.solution) {
+    throw new HuntJS.Error(422, 'Must give challenge and solution');
   }
 
   if (!['N', 'E', 'S', 'W', 'NE', 'SE', 'SW', 'NW'].includes(data.direction)) {
     throw HuntJS.Error(422, 'Invalid direction');
   }
 
-  console.log(`Got direction command: ${data.direction}`);
+  challenge.verifySolution(data.challenge, data.solution, session.id());
+
   await simPostCommand(`/${team.id()}/move/${data.direction}`);
 
   return {};
@@ -67,6 +73,10 @@ HuntJS.post('/move', async ({ team, data }) => {
 });
 
 HuntJS.post('/moveUnlimited', async ({ team, data }) => {
+  if (process.env.TPMH_DEVMODE !== 'true') {
+    throw HuntJS.Error(422, 'Dev mode not permitted');
+  }
+
   if (!data || !data.direction) {
     throw HuntJS.Error(422, 'No direction given');
   }
@@ -167,5 +177,8 @@ HuntJS.post('/sendChatMessage', ({ data, team }) => {
   rateLimitPerMinute: 300,
 });
 
+HuntJS.get('/challenge', ({ session }) => {
+  return challenge.genChallenge(session.id());
+});
 
 HuntJS.serve();

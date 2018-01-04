@@ -1,11 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!--
-  TEST SOLVERS STAY OUT!!!!!
-
-  This code will be minified, obfuscated, and have some other creative protections
-  applied to it. Please don't read or modify this code for right now.
-  -->
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -25,7 +19,6 @@
   </head>
   <body>
     <h1>Twitch Plays Mystery Hunt</h1>
-    <p class="testsolver-note">Note to testsolvers: there are some protections for the client-side and server-side code that are not yet in place for this puzzle. For now, please do not view or modify the source code of this page. Also, do not interact with the backend in any way other than via this webpack (e.g. via curl commands, custom scripts, or custom webpages). Anything else is fair game, and we'll have another round of anything-goes testing after we've finished up the protections.</p>
 
     <div id="main">
     <table id="grid">
@@ -38,7 +31,7 @@
       <div id="chat"></div>
       <div>&gt; <input id="entry" type="text" /></div>
     </div>
-    <p id="status">Status: <span id="status-text">ready</span></p>
+    <p id="status">Status: <span id="status-text">initializing</span></p>
 
     <p>Commands: n, s, e, w, ne, se, nw, sw,
       restart level<span id="levelbit"></span></p>
@@ -50,13 +43,7 @@
     <p id="godMode" style="display: none">Your ninja ability has leveled up! You can now hide in plain sight, walk on lava, and you are invulnerable to all forms of damage.</p>
 
     <div id="debugtools">
-      <!--
-      TEST SOLVERS STAY OUT!!!!!
-
-      This controls are to help with dev, they won't be available to solvers
-      -->
-      <p>Rate-limited: <span id="rate-limit-indicator">true</span> <button onClick="toggleRateLimiting()">Toggle</button></p>
-      <p>Delayed: <span id="delay-indicator">true</span> <button onClick="toggleDelay()">Toggle</button></p>
+      <p>Rate-limited and Delayed: <span id="rate-limit-indicator">true</span> <button onClick="toggleRateLimiting()">Toggle</button></p>
     </div>
 
     </div>
