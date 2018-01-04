@@ -22,11 +22,8 @@
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script type="text/javascript" src="client.js"></script>
-    <script type="text/javascript" src="twitch.js"></script>
-    <script type="text/javascript" src="timesync.js"></script>
   </head>
-  <body onload="init()">
+  <body>
     <h1>Twitch Plays Mystery Hunt</h1>
     <p class="testsolver-note">Note to testsolvers: there are some protections for the client-side and server-side code that are not yet in place for this puzzle. For now, please do not view or modify the source code of this page. Also, do not interact with the backend in any way other than via this webpack (e.g. via curl commands, custom scripts, or custom webpages). Anything else is fair game, and we'll have another round of anything-goes testing after we've finished up the protections.</p>
 
@@ -64,6 +61,8 @@
 
     </div>
     </div>
+
+    <script type="text/javascript" src="dist/tpmh.js"></script>
   </body>
 
 </html>

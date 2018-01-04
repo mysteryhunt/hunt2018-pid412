@@ -41,7 +41,7 @@ var launchers = [25]*launcherSpec{
 	&launcherSpec{x: 22, y: 9, vx: 0, vy: -1},
 }
 
-const secondsPerDartMove = 2
+const secondsPerDartMove = 1
 
 func dartPosition(launcherIdx int, launchedAgoSeconds float64) (int8, int8) {
 	numMoves := (int8(launchedAgoSeconds / secondsPerDartMove)) + 1

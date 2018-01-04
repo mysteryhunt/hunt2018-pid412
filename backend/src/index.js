@@ -4,6 +4,7 @@ const HuntJS = require('huntjs-backend');
 const request = require('request');
 
 const DB = require('./db');
+const maps = require('./maps');
 
 DB.init();
 
@@ -89,18 +90,23 @@ HuntJS.get('/currentTime', async () => {
   return Number(await simGetValue('/currentTime'));
 });
 
-HuntJS.get('/levelData', ({ data }) => {
+HuntJS.get('/levelData', async ({ data, team }) => {
   if (!data || !data.level) {
     throw HuntJS.Error(422, 'No level given');
   }
 
-  // this check should read from mysql
-  // if (!((data.level === 1) || (data.level === 2))) {
-  //   throw HuntJS.Error(422, 'You haven\'t unlocked that level');
-  // }
+  if (!((data.level === 1) || (data.level === 2) || (data.level === 3))) {
+    throw HuntJS.Error(422, `Invalid level: ${data.level}`);
+  }
 
-  // TODO: actual level data
-  return ['fake level data 1', 'fake level data 2'];
+  if (data.level >= 2) {
+    const teamData = await DB.fetchTeamData(team.id());
+    if (!teamData || !teamData.levels[data.level - 2].won) {
+      throw HuntJS.Error(422, 'You haven\'t unlocked that level');
+    }
+  }
+
+  return maps[data.level];
 });
 
 HuntJS.get('/teamStatus', async ({ team }) => {
@@ -138,7 +144,7 @@ HuntJS.post('/changeLevel', async ({ data, team }) => {
   }
 
   await simPostCommand(`/${team.id()}/changeLevel/${data.level}`);
-  return 'fake level data';
+  return {};
 });
 
 HuntJS.onSubscribe('gameState', ({ team }) => {
