@@ -208,6 +208,8 @@ const commands = {
 };
 
 function init() {
+  checkBrowser();
+
   document.getElementById('entry').addEventListener(
     'keydown', (event) => {
       if (event.key == 'Enter') {
@@ -238,6 +240,20 @@ function init() {
   clientInit();
 
   setInterval(tick, 100);
+}
+
+function checkBrowser() {
+  // We need webassembly support. Also, safari block third-party cookies which
+  // makes it not work when serving the puzzle off a non-production domain,
+  // so we need to warn about Safari for now (but should work once we're on
+  // the production domain)
+
+  const supportsWasm = (typeof WebAssembly === 'object');
+  const isSafari = (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1);
+
+  if (isSafari || !supportsWasm) {
+    document.getElementById('browserWarning').style.display = 'block';
+  }
 }
 
 function addToChat(message, sender, classArg) {

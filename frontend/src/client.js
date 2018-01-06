@@ -8,7 +8,12 @@ let client;
 let rateLimitEnabled = true;
 let status = 'wait'; // ready, submitting, or wait
 
-const worker = new Worker('worker/worker.js');
+let worker;
+try {
+  worker = new Worker('worker/worker.js');
+} catch (e) {
+  console.log('Failed to intialize WebWorker.');
+}
 
 function changeStatus(newStatus) {
   status = newStatus;

@@ -21,6 +21,6 @@
     "lint": "eslint src",
     "build-browser": "webpack --output-filename tpmh.js && webpack --output-filename tpmh.min.js --optimize-minimize",
     "build-watch": "webpack --output-filename tpmh.js --watch",
-    "zip": "webpack --output-filename tpmh.js && rm -f Archive.zip && zip -r Archive.zip ./dist ./img ./index.html ./style.css"
+    "zip": "webpack --optimize-minimize --output-filename tpmh.js && rm -f Archive.zip && zip -r Archive.zip ./dist ./img ./worker ./index.html ./style.css"
   }
 }
