@@ -8,11 +8,11 @@ const dartVelocity = 1;
 
 const windowSize = 11;
 
-let difficulty = 1;
+let teamDifficulty = 1;
 
 const maps = {};
 
-function plot(level, map, time, startTime, pr, pc, rest) {
+function plot(level, map, time, startTime, pr, pc, rest, difficulty, grid) {
   // First, preprocess moving things.
   const dartmap = {};
   if (level == 2) {
@@ -126,7 +126,8 @@ function plot(level, map, time, startTime, pr, pc, rest) {
     }
     html += '</tr>';
   }
-  const grid = document.getElementById('grid');
+
+  // eslint-disable-next-line no-param-reassign
   grid.innerHTML = html;
 }
 
@@ -169,7 +170,7 @@ function handleTeamStatus(level, levelStatuses) {
 }
 
 function setDifficulty(newDifficulty) {
-  difficulty = newDifficulty;
+  teamDifficulty = newDifficulty;
 }
 
 function handleDeaths(deaths) {
@@ -189,7 +190,10 @@ function tick() {
       plot(level, maps[level], getTime() / 1000,
         startTime / 1000,
         ninjaY, ninjaX,
-        rest);
+        rest,
+        teamDifficulty,
+        document.getElementById('grid'),
+      );
     } else {
       requestLevel(level);
     }
@@ -292,5 +296,5 @@ function handleLevelData(level, data) {
 
 export {
   addToChat, init, handleTeamStatus, handleState, handleDeaths, setDifficulty,
-  handleLevelData,
+  handleLevelData, plot,
 };

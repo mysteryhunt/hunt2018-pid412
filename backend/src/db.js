@@ -94,4 +94,17 @@ module.exports = {
       );
     });
   },
+
+  fetchAdminTeamData() {
+    return new Promise((resolve, reject) => {
+      mysql.query('SELECT team, deaths, difficulty FROM tpmh_team_levels;', (err, res) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve(res);
+      });
+    });
+  },
 };

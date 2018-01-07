@@ -1,0 +1,104 @@
+.w { background-image: url(img/w.png) }
+.f { background-image: url(img/f.png) }
+.t { background-image: url(img/t.png), url(img/l.png) }
+.l { background-image: url(img/l.png) }
+.x1 { background-image: url(img/x1.png), url(img/f.png) }
+.x2 { background-image: url(img/x2.png), url(img/f.png) }
+.x3 { background-image: url(img/x3.png), url(img/f.png) }
+.v { background-color: black; }
+.g { background-image: url(img/gl.png), url(img/f.png) }
+.gr { background-image: url(img/gr.png), url(img/f.png) }
+.p { background-image: url(img/p.png), url(img/f.png) }
+.dn { background-image: url(img/dn.png), url(img/w.png) }
+.ds { background-image: url(img/ds.png), url(img/w.png) }
+.de { background-image: url(img/de.png), url(img/w.png) }
+.dw { background-image: url(img/dw.png), url(img/w.png) }
+.an { background-image: url(img/an.png); }
+.as { background-image: url(img/as.png); }
+.ae { background-image: url(img/ae.png); }
+.aw { background-image: url(img/aw.png); }
+.ss { background-image: url(img/ss.png); }
+.sw { background-image: url(img/sw.png); }
+.sa { background-image: url(img/sa.png); }
+.o { background-image: url(img/o.png); }
+.player { background-image: url(img/player.png) }
+table { background-color: black; margin: 10px; float: left; }
+td { padding: 0; position: relative; background-size: contain; }
+table span {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-size: contain;
+}
+
+
+td { height: 25px; width: 25px; text-align: center; }
+table { border-spacing: 0; table-layout: fixed; width: 225px; height: 225px;}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.summary {
+  margin: 10px 0;
+  border-bottom: 1px solid black;
+}
+
+.summary:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.left {
+  float: left;
+  width: 50%;
+  text-align: center;
+}
+
+.right {
+  float: right;
+  width: 50%;
+  text-align: center;
+}
+
+.bignum {
+  font-size: 100px;
+  margin: 0;
+}
+
+#grids {
+  padding: 10px;
+}
+
+.grid-parent {
+  width: 295px;
+  float: left;
+  position: relative;
+}
+
+.flasher {
+  z-index: 1000;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: red;
+}
+
+.grid-parent:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+h3 {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 5px;
+}

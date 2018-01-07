@@ -181,4 +181,38 @@ HuntJS.get('/challenge', ({ session }) => {
   return challenge.genChallenge(session.id());
 });
 
+HuntJS.get('/adminLevelData', ({ team }) => {
+  if (team.id() !== '__tpmhadmin__') {
+    throw HuntJS.Error(422, 'Admins only');
+  }
+
+  return { maps };
+});
+
+HuntJS.get('/adminTeamStatuses', async ({ team }) => {
+  if (team.id() !== '__tpmhadmin__') {
+    throw HuntJS.Error(422, 'Admins only');
+  }
+
+  const data = await DB.fetchAdminTeamData();
+  const teamStateKeys = data.map(datum => `${process.env.HUNT_MYSQL_DB}:${datum.team}:gameState`);
+
+  const teamStates = await new Promise((resolve, reject) => {
+    HuntJS._redis.mget(teamStateKeys, (err, res) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve(res);
+    });
+  });
+
+  teamStates.forEach((teamState, idx) => {
+    data[idx].state = teamState;
+  });
+
+  return data;
+});
+
 HuntJS.serve();
