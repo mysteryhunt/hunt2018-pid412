@@ -3,8 +3,8 @@
 import { plot } from '../src/twitch';
 import TimeSync from '../src/timesync';
 
-const INACTIVITY_CUTOFF = 15 * 1000;
-const REFRESH_RATE = 1 * 1000;
+const INACTIVITY_CUTOFF = 5 * 60 * 1000;
+const REFRESH_RATE = 5 * 1000;
 
 let client;
 let maps;
@@ -95,7 +95,7 @@ function renderTimeSinceDeath() {
 }
 
 function init() {
-  client = HuntJSClient.connect('tpmh', 'http://localhost:8000');
+  client = HuntJSClient.connect('tpmh', 'https://puzzle-tpmh.head-hunters.org');
   HuntJSClient.overrideAuth('__tpmhadmin__', `admin/${prompt('Enter TPMH admin password')}`);
 
   client.get('/adminLevelData')
