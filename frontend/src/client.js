@@ -1,6 +1,7 @@
-/* globals HuntJSClient, toastr */
+/* globals HuntJSClient, toastr, TPMH_DEV */
 
 import TimeSync from './timesync';
+import makeWorker from './makeWorker';
 import { addToChat, handleTeamStatus, handleState, handleDeaths, setDifficulty, handleLevelData } from './twitch';
 
 let client;
@@ -10,7 +11,7 @@ let status = 'wait'; // ready, submitting, or wait
 
 let worker;
 try {
-  worker = new Worker('worker/worker.js');
+  worker = makeWorker();
 } catch (e) {
   console.log('Failed to intialize WebWorker.');
 }
@@ -60,12 +61,12 @@ function solveChallenge(jwt) {
 }
 
 function clientInit() {
-  // To connect to the dev backend
-  client = HuntJSClient.connect('tpmh', 'http://localhost:8000');
-  HuntJSClient.overrideAuth('test-team', 'dev');
-
-  // To connect to the prod backend
-  // client = HuntJSClient.connect('tpmh', 'https://puzzle-tpmh.head-hunters.org');
+  if (TPMH_DEV) {
+    client = HuntJSClient.connect('tpmh', 'http://localhost:8000');
+    HuntJSClient.overrideAuth('test-team', 'dev');
+  } else {
+    client = HuntJSClient.connect('tpmh', 'https://puzzle-tpmh.head-hunters.org');
+  }
 
   function heartbeat() {
     client.post('/heartbeat')

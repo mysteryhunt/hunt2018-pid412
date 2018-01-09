@@ -27,7 +27,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      HUNT_APP_NAME: '"tpmh"',
+      TPMH_DEV: 'false',
     }),
   ],
 };

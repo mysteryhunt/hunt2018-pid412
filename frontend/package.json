@@ -19,10 +19,10 @@
   },
   "scripts": {
     "lint": "eslint src",
-    "build-browser": "webpack --output-filename tpmh.js && webpack --output-filename tpmh.min.js --optimize-minimize",
-    "build-watch": "webpack --output-filename tpmh.js --watch",
+    "build-worker": "cd ../wasm && scripts/build.sh",
+    "build-watch": "npm run build-worker && webpack --config webpack.dev.config.js --output-filename tpmh.js --watch",
     "admin-build-prod": "cd admin && webpack --output-filename tpmh.js --optimize-minimize",
     "admin-build-watch": "cd admin && webpack --output-filename tpmh.js --watch",
-    "zip": "webpack --optimize-minimize --output-filename tpmh.js && rm -f Archive.zip && zip -r Archive.zip ./dist ./img ./worker ./index.html ./style.css"
+    "zip": "rm dist/*.js && npm run build-worker && webpack --config webpack.prod.config.js --optimize-minimize --output-filename tpmh.js && rm -f Archive.zip && zip -r Archive.zip ./dist ./img ./index.html ./style.css"
   }
 }
