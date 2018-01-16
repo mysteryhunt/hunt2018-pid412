@@ -1,6 +1,6 @@
 # Twitch Plays Mystery Hunt
 
-- Puzzle Author: Ryan Veeder, Hubert Hwang
+- Puzzle Authors: Ryan Veeder, Hubert Hwang
 - Tech Authors: Ben Weissmann (backend & dirty wasm tricks), Xavid (frontend)
 
 ## Getting it running
