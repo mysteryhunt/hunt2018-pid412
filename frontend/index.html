@@ -18,41 +18,52 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
   </head>
   <body>
-    <h1>Twitch Plays Mystery Hunt</h1>
-
-    <div class="browser-warning" id="browserWarning">
-      Controlling a Ninja requires the very latest in web technologies! Unfortunately,
-      your browser isn't supported. Please use the latest version of Chrome, Firefox,
-      or Microsoft Edge.
-    </div>
-
     <div id="main">
-    <table id="grid">
-    </table>
+      <div class="browser-warning" id="browserWarning">
+        Controlling a Ninja requires the very latest in web technologies! Unfortunately,
+        your browser isn't supported. Please use the latest version of Chrome, Firefox,
+        or Microsoft Edge.
+      </div>
 
-    <div id="controls">
-    <p><label>Chat Name: <input id="username" type="text" value="someone" /></label></p>
-    <div id="chatbox">
-      <center>Chat</center>
-      <div id="chat"></div>
-      <div>&gt; <input id="entry" type="text" /></div>
-    </div>
-    <p id="status">Status: <span id="status-text">initializing</span></p>
+      <form action="#" id="teamForm">
+        <p>
+          Enter a team name to join a shared instance of the game. You can invite friends to join you by having them enter the exact same team name. Team names may only contain letters, numbers, dashes, and underscores (no spaces).
+        </p>
+        <input type="text" minlength="3" maxlength="64" pattern="^[a-zA-Z0-9-_]+$" id="teamFormName"/>
+        <button type="submit">Start Game</button>
+      </form>
 
-    <p>Commands: n, s, e, w, ne, se, nw, sw,
-      restart level<span id="levelbit"></span></p>
+      <div id="game" class="clearfix" style="display: none">
+        <p>
+          Team Name: <span id="teamNameDisplay"></span>
+        </p>
 
-    <p>Treasures: <span id="inventory"></span></p>
+        <table id="grid">
+        </table>
 
-    <p>Death Count: <span id="deathCount"></span></p>
+        <div id="controls">
+          <p><label>Chat Name: <input id="username" type="text" value="someone" /></label></p>
+          <div id="chatbox">
+            <center>Chat</center>
+            <div id="chat"></div>
+            <div>&gt; <input id="entry" type="text" /></div>
+          </div>
+          <p id="status">Status: <span id="status-text">initializing</span></p>
 
-    <p id="godMode" style="display: none">Your ninja ability has leveled up! You can now hide in plain sight, walk on lava, and you are invulnerable to all forms of damage.</p>
+          <p>Commands: n, s, e, w, ne, se, nw, sw,
+            restart level<span id="levelbit"></span></p>
 
-    <div id="debugtools">
-      <p>Rate-limited and Delayed: <span id="rate-limit-indicator">true</span> <button onClick="toggleRateLimiting()">Toggle</button></p>
-    </div>
+          <p>Treasures: <span id="inventory"></span></p>
 
-    </div>
+          <p>Death Count: <span id="deathCount"></span></p>
+
+          <p id="godMode" style="display: none">Your ninja ability has leveled up! You can now hide in plain sight, walk on lava, and you are invulnerable to all forms of damage.</p>
+
+          <div id="debugtools">
+            <p>Rate-limited and Delayed: <span id="rate-limit-indicator">true</span> <button onClick="toggleRateLimiting()">Toggle</button></p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script type="text/javascript" src="dist/tpmh.js"></script>

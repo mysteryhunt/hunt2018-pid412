@@ -181,16 +181,16 @@ HuntJS.get('/challenge', ({ session }) => {
   return challenge.genChallenge(session.id());
 });
 
-HuntJS.get('/adminLevelData', ({ team }) => {
-  if (team.id() !== '__tpmhadmin__') {
+HuntJS.get('/adminLevelData', ({ team, data }) => {
+  if (data.key !== process.env.TPMH_ADMIN_KEY) {
     throw HuntJS.Error(422, 'Admins only');
   }
 
   return { maps };
 });
 
-HuntJS.get('/adminTeamStatuses', async ({ team }) => {
-  if (team.id() !== '__tpmhadmin__') {
+HuntJS.get('/adminTeamStatuses', async ({ team, reqData }) => {
+  if (reqData.key !== process.env.TPMH_ADMIN_KEY) {
     throw HuntJS.Error(422, 'Admins only');
   }
 

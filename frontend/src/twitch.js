@@ -241,9 +241,19 @@ function init() {
       }
     });
 
-  clientInit();
+  document.getElementById('teamForm').addEventListener('submit', (evt) => {
+    evt.preventDefault();
 
-  setInterval(tick, 100);
+    const teamId = document.getElementById('teamFormName').value;
+
+    clientInit(teamId);
+
+    setInterval(tick, 100);
+
+    document.getElementById('teamNameDisplay').innerText = teamId;
+    document.getElementById('teamForm').style.display = 'none';
+    document.getElementById('game').style.display = 'block';
+  });
 }
 
 function checkBrowser() {

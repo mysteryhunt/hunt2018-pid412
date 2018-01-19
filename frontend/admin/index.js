@@ -9,6 +9,7 @@ const REFRESH_RATE = 5 * 1000;
 let client;
 let maps;
 let lastDeathTime;
+let adminPassword;
 
 // { [teamId: string]: { deaths, state, lastChange } }
 const teams = {};
@@ -84,7 +85,7 @@ function render(teamsData) {
 }
 
 function refresh() {
-  client.get('/adminTeamStatuses')
+  client.get('/adminTeamStatuses', { key: adminPassword })
     .then(data => render(data))
     .catch(err => console.error(err));
 }
@@ -96,9 +97,10 @@ function renderTimeSinceDeath() {
 
 function init() {
   client = HuntJSClient.connect('tpmh', 'https://puzzle-tpmh.head-hunters.org');
-  HuntJSClient.overrideAuth('__tpmhadmin__', `admin/${prompt('Enter TPMH admin password')}`);
+  HuntJSClient.overrideAuth('__tpmhadmin__', 'dev');
+  adminPassword = prompt('TPMH Admin Password');
 
-  client.get('/adminLevelData')
+  client.get('/adminLevelData', { key: adminPassword })
     .then((data) => {
       maps = data.maps;
 

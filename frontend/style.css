@@ -22,7 +22,11 @@
 .sa { background-image: url(img/sa.png); }
 .o { background-image: url(img/o.png); }
 .player { background-image: url(img/player.png) }
-table { background-color: black; margin: 10px; float: left; }
+table {
+    background-color: black;
+    margin: 10px 10px 10px 0;
+    float: left;
+}
 td { padding: 0; position: relative; }
 table span { width: 100%; height: 100%; display: block; position: absolute;
        left: 0; top: 0}

@@ -1,7 +1,7 @@
 /* globals HuntJSClient, toastr, TPMH_DEV */
 
 import TimeSync from './timesync';
-import makeWorker from './makeWorker';
+import makeWorker from './makeworker';
 import { addToChat, handleTeamStatus, handleState, handleDeaths, setDifficulty, handleLevelData } from './twitch';
 
 let client;
@@ -60,13 +60,9 @@ function solveChallenge(jwt) {
   });
 }
 
-function clientInit() {
-  if (TPMH_DEV) {
-    client = HuntJSClient.connect('tpmh', 'http://localhost:8000');
-    HuntJSClient.overrideAuth('test-team', 'dev');
-  } else {
-    client = HuntJSClient.connect('tpmh', 'https://puzzle-tpmh.head-hunters.org');
-  }
+function clientInit(username) {
+  client = HuntJSClient.connect('tpmh', 'https://tpmh.studfindr.com/api');
+  HuntJSClient.overrideAuth(username, 'dev');
 
   function heartbeat() {
     client.post('/heartbeat')

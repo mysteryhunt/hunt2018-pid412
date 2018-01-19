@@ -2200,9 +2200,9 @@ https-browserify@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
 
-"huntjs-backend@https://github.com/benweissmann/huntjs-backend.git#965a6613a671bd0aca56643493c4ea08bc4eb5ba":
+"huntjs-backend@https://github.com/benweissmann/huntjs-backend.git#09d768df350362d3444b840876ea77cb767c58a9":
   version "1.0.0"
-  resolved "https://github.com/benweissmann/huntjs-backend.git#965a6613a671bd0aca56643493c4ea08bc4eb5ba"
+  resolved "https://github.com/benweissmann/huntjs-backend.git#09d768df350362d3444b840876ea77cb767c58a9"
   dependencies:
     babel-plugin-transform-flow-strip-types "^6.22.0"
     babel-preset-es2015 "^6.24.1"
