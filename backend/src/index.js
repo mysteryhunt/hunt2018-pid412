@@ -189,7 +189,7 @@ HuntJS.get('/adminLevelData', ({ team, data }) => {
   return { maps };
 });
 
-HuntJS.get('/adminTeamStatuses', async ({ team, reqData }) => {
+HuntJS.get('/adminTeamStatuses', async ({ team, data: reqData }) => {
   if (reqData.key !== process.env.TPMH_ADMIN_KEY) {
     throw HuntJS.Error(422, 'Admins only');
   }
