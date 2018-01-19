@@ -21,8 +21,9 @@
     "lint": "eslint src",
     "build-worker": "cd ../wasm && scripts/build.sh",
     "build-watch": "npm run build-worker && webpack --config webpack.dev.config.js --output-filename tpmh.js --watch",
+    "build-prod": "rm -f dist/*.js && npm run build-worker && webpack --config webpack.prod.config.js --optimize-minimize --output-filename tpmh.js",
     "admin-build-prod": "cd admin && webpack --output-filename tpmh.js --optimize-minimize",
     "admin-build-watch": "cd admin && webpack --output-filename tpmh.js --watch",
-    "zip": "rm dist/*.js && npm run build-worker && webpack --config webpack.prod.config.js --optimize-minimize --output-filename tpmh.js && rm -f Archive.zip && zip -r Archive.zip ./dist ./img ./index.html ./style.css"
+    "zip": "yarn run build-prod && rm -f Archive.zip && zip -r Archive.zip ./dist ./img ./index.html ./style.css"
   }
 }
