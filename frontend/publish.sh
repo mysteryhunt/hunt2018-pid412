@@ -7,7 +7,7 @@ yarn install
 yarn run build-prod
 yarn run admin-build-prod
 
-sudo rm -rf /var/www/tpmh
-sudo mkdir -p /var/www/tpmh/admin
-sudo cp -R ./dist ./img ./index.html ./style.css /var/www/tpmh
-cp -R ./admin/dist ./admin/img ./admin/index.html ./admin/style.css /var/www/tpmh/admin
+ssh tpmh sudo rm -rf /var/www/tpmh
+ssh tpmh mkdir -p /var/www/tpmh/admin
+scp -r ./dist ./img ./index.html ./style.css tpmh:/var/www/tpmh
+scp -r ./admin/dist ./admin/img ./admin/index.html ./admin/style.css tpmh:/var/www/tpmh/admin

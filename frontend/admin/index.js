@@ -96,7 +96,7 @@ function renderTimeSinceDeath() {
 }
 
 function init() {
-  client = HuntJSClient.connect('tpmh', 'https://puzzle-tpmh.head-hunters.org');
+  client = HuntJSClient.connect('tpmh', 'https://tpmh.studfindr.com/api');
   HuntJSClient.overrideAuth('__tpmhadmin__', 'dev');
   adminPassword = prompt('TPMH Admin Password');
 
