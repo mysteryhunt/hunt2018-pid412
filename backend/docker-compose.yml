@@ -10,15 +10,17 @@ services:
       MYSQL_USER: puzzle
       MYSQL_PASSWORD: puzzle
     volumes:
-      - mysql-data:/var/lib/mysql
+      - ~/tpmhdata/mysql-data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "127.0.0.1:3306:3306"
 
   redis:
     image: redis:3.2.10
     restart: always
+    volumes:
+      - ~/tpmhdata/redis-data:/data
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
 
   puzzle-dev:
     depends_on:
@@ -26,7 +28,7 @@ services:
       - redis
     build: .
     ports:
-      - "8000:80"
+      - "127.0.0.1:8000:80"
     restart: always
     environment:
       HUNT_MYSQL_HOST: db
@@ -44,32 +46,31 @@ services:
       HUNT_AUTH_ADMIN_PW: 'devpassword'
       TPMH_DEVMODE: 'true'
       TPMH_JWT_CHALLENGE_SECRET: 'ad6768b93025f8ba509e224f5dded6387c2b12335a4990679cd80619548d7b5c'
-      # SIMULATION_SERVICE_ADDRESS: 'http://puzzle-sim'
+      SIMULATION_SERVICE_ADDRESS: 'http://puzzle-sim'
       # Or, to talk to a local instance:
-      SIMULATION_SERVICE_ADDRESS: 'http://docker.for.mac.localhost:8080'
-    command: "/wait-for-it.sh db:3306 -- /wait-for-it.sh redis:6379 -- yarn start-mon"
+      # SIMULATION_SERVICE_ADDRESS: 'http://docker.for.mac.localhost:8080'
+    command: "/wait-for-it.sh db:3306 -- /wait-for-it.sh redis:6379 -- node /app/src/index.js"
     volumes:
       - ./wait-for-it.sh:/wait-for-it.sh
-      - ./src:/app/src
 
-  # puzzle-sim:
-  #   depends_on:
-  #     - db
-  #     - redis
-  #   build: ./go/src/hunt/tpmhsim
-  #   restart: always
-  #   environment:
-  #     HUNT_MYSQL_HOST: db
-  #     HUNT_MYSQL_PORT: 3306
-  #     HUNT_MYSQL_USER: puzzle
-  #     HUNT_MYSQL_PASSWORD: puzzle
-  #     HUNT_MYSQL_DB: puzzle
-  #     HUNT_REDIS_URL: 'redis://redis:6379'
-  #     HUNT_PORT: 80
-  #     TPMHSIM_DEBUG: 'true'
-  #   command: "/wait-for-it.sh db:3306 -- /wait-for-it.sh redis:6379 -- /tpmhsim"
-  #   volumes:
-  #     - ./wait-for-it-alpine.sh:/wait-for-it.sh
+  puzzle-sim:
+    depends_on:
+      - db
+      - redis
+    build: ./go/src/hunt/tpmhsim
+    restart: always
+    environment:
+      HUNT_MYSQL_HOST: db
+      HUNT_MYSQL_PORT: 3306
+      HUNT_MYSQL_USER: puzzle
+      HUNT_MYSQL_PASSWORD: puzzle
+      HUNT_MYSQL_DB: puzzle
+      HUNT_REDIS_URL: 'redis://redis:6379'
+      HUNT_PORT: 80
+      TPMHSIM_DEBUG: 'true'
+    command: "/wait-for-it.sh db:3306 -- /wait-for-it.sh redis:6379 -- /tpmhsim"
+    volumes:
+      - ./wait-for-it-alpine.sh:/wait-for-it.sh
 
   # puzzle-prod:
   #   depends_on:
@@ -93,5 +94,3 @@ services:
   #   volumes:
   #     - ./wait-for-it.sh:/wait-for-it.sh
 
-volumes:
-  mysql-data:
